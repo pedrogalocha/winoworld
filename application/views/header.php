@@ -93,7 +93,7 @@
                   <a class="nav-link" href="contact.html">Missões Efetuadas</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="<?php echo base_url('../login') ?>">Area Reservada</a>
+                  <a class="nav-link" href="<?php echo base_url('login')?>">Area Reservada</a>
                 </li>
               </ul>
             </div>

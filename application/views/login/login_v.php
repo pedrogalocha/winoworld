@@ -1,4 +1,4 @@
-<?php $this->load->view('../header')?>
+<?php $this->load->view('header')?>
 
 <div class="container" style="padding-top: 100px; padding-bottom: 100px;">
     <div class="row">
@@ -29,4 +29,4 @@
     </div>
   </div>
 
-  <?php $this->load->view('../footer')?>
+  <?php $this->load->view('footer')?>
