@@ -1,5 +1,5 @@
     <!--================Footer Area =================-->
-    <footer class="footer_area section_gap_top">
+    <footer class="footer_area section_gap_top col-lg-12">
       <div class="container">
         <div class="row single-footer-widget">
           <div class="col-lg-6 col-md-6 col-sm-12">

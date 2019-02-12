@@ -55,3 +55,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 // Rotas Login
 $route['login'] = 'Login';
+
+
+//Autenticado
+$route['Administrativo'] = 'adm';
+$route['Jogador'] = 'player';

@@ -358,7 +358,7 @@ img {
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
 .header_area {
-  position: absolute;
+  position: relative;
   width: 100%;
   top: 0;
   left: 0;
@@ -3869,5 +3869,16 @@ h6 {
 /* End Footer Area css
 ============================================================================================ */
 /*---------------------------------------------------- */
+
+/* Card Area and Player CSS */
+.card-avatar {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+.h1-player {
+  color: #3e3590;
+  text-align: center;
+}
 
 /*# sourceMappingURL=style.css.map */

@@ -13,7 +13,7 @@ class Login extends CI_Controller {
 
 		//Carregar Helps para trabalhar com formularios
 		$this ->load->helper('form');
-		$this ->load->helper('form_validation');
+		$this ->load->library('form_validation');
 
 		// Recuperamos os dados digitados pelo usuário no formulário via POST
 		$login = $this->input->post('login');
@@ -26,6 +26,9 @@ class Login extends CI_Controller {
 
 			//Função que verifica a permisão do usuário
 			$permissao = $this->Login_Model->getPermissao($login);
+
+			//Função para verificar login e senha existe no BD	
+			$verifica = $this->Login_Model->verifica($login, $senha);
 
 				// Caso o usuario exista no BD
 				if($verifica === true){
@@ -42,7 +45,9 @@ class Login extends CI_Controller {
 						}
 
 				}else{
-					redirect(base_url('acessonegado'));
+					echo "<script> 
+					alert('Você não tem permissão para acessar esta area'); window.location.href = '../login';
+					</script>";
 				}
 
 
