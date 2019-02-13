@@ -15,7 +15,7 @@ class player extends CI_Controller {
     $login = $this->session->userdata('nome');
     $dados['pemissao'] = $this->permissao->getPermissao($login);
     $dados['playerInfo'] = $this->playerInfo->listar_player($login);
-    $dados['conquistas'] = $this->conquistas->listar_conquistas($login);
+    $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
 
     if($dados['pemissao'] != "Jogador"){
       echo "<script> 
@@ -23,7 +23,6 @@ class player extends CI_Controller {
             </script>";
     }else{
       $this->load->view('restrito/player.php', $dados);
-      //echo $dados['playerInfo']['name'];
     }
   }
 }

@@ -9,7 +9,7 @@ class Player_Model extends CI_Model
     }
 
     public function listar_player($login){
-      $sql = "Select p.name,p.hp,p.level,c.class_name,u.username,p.avatar,p.xp,p.patent From players p 
+      $sql = "Select p.id, p.name,p.hp,p.level,c.class_name,u.username,p.avatar,p.xp,p.patent From players p 
       Inner Join users u on p.users_id = u.id 
         Inner Join class c on p.class_id = c.id
         where u.username = '$login'";
@@ -24,11 +24,11 @@ class Player_Model extends CI_Model
 
 
 
-    public function listar_conquistas($login){
-      $sql = "Select c.nome_con, c.xp, c.descricao From conquistas c 
-      Inner Join players p on c.player_id = p.id
-      Inner Join users u on p.users_id = u.id
-      where u.username = '$login'";
+    public function listar_conquistas($id_player){
+      $sql = "Select  c.id,c.nome_con, c.xp, c.descricao,p.name,cf.data From conquistas_feitas cf
+      Inner Join players p on cf.jogador_id = p.id
+        Inner Join conquistas c on cf.conquista_id = c.id
+        where p.id = $id_player;";
       $heroe = $this->db->query($sql);
       $resultado = $heroe->row_array();
       if($resultado!=null){

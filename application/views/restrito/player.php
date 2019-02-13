@@ -27,7 +27,6 @@
     <div class="col-sm-9">
       <br>
       <h1 class="h1-player">Conquistas</h1>
-      <?php foreach ($conquistas as $conq){ ?>
     	<div class="col-sm-3">       
           <div class="tab-content">
             <div class="tab-pane active" id="home">
@@ -47,7 +46,6 @@
                 <hr>
           </div><!--/tab-pane-->
           </div><!--/tab-content-->
-     <?php }?>
         </div><!--/col-6-->
       </div>
       </div>
