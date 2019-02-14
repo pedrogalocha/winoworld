@@ -1,5 +1,5 @@
 <div class="col-sm-12">
-  <h1>Tarefas <a href="#"><i class="far fa-plus-square"></i></a></h1>
+  <h1>Tarefas <button type="button" data-toggle="modal" data-target="#addTarefa"><i class="far fa-plus-square"></i></button></h1>
   <div class="col-sm-12">
     <table class="table table-hover">
       <thead>

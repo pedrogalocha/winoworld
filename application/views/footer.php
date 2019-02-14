@@ -36,6 +36,7 @@
     <script src="<?php echo base_url('includes/vendors/counter-up/jquery.counterup.min.js') ?>"></script>
     <script src="<?php echo base_url('includes/vendors/counter-up/jquery.waypoints.min.js') ?>"></script>
     <script src="<?php echo base_url('includes/js/mail-script.js') ?>"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
 
     <!--gmaps Js-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>

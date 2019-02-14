@@ -22,8 +22,6 @@ class Player_Model extends CI_Model
       }
     }
 
-
-
     public function listar_conquistas($id_player){
       $sql = "Select  c.id,c.nome_con, c.xp, c.descricao,p.name,cf.data,c.imagem From conquistas_feitas cf
       Inner Join players p on cf.jogador_id = p.id
@@ -37,11 +35,21 @@ class Player_Model extends CI_Model
       }
     }
 
-    public function listar_tarefas($id_player){
+    public function listar_tarefas_feitas($id_player){
       $sql = "Select t.name_task, tf.data_conclusao, tf.quantidade, tf.n_chamado From task_feita tf
       Inner Join players p on tf.player_id = p.id
         Inner Join task t on tf.task_id = t.id
         where p.id = $id_player;";
+      $heroe = $this->db->query($sql);
+      if($heroe!=null){
+        return $heroe->result();
+      } else {
+        return null;
+      }
+    }
+
+    public function listar_tarefas(){
+      $sql = "Select id,name_task,xp From task";
       $heroe = $this->db->query($sql);
       if($heroe!=null){
         return $heroe->result();

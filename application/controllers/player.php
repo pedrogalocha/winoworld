@@ -9,6 +9,7 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','playerInfo');
     $this->load->model('Player_Model','conquistas');
     $this->load->model('Player_Model','tarefas');
+    $this->load->model('Player_Model','tasks');
   }
 
   public function index()
@@ -17,7 +18,8 @@ class player extends CI_Controller {
     $dados['pemissao'] = $this->permissao->getPermissao($login);
     $dados['playerInfo'] = $this->playerInfo->listar_player($login);
     $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
-    $dados['tarefas'] = $this->conquistas->listar_tarefas($dados['playerInfo']['id']);
+    $dados['tarefas'] = $this->conquistas->listar_tarefas_feitas($dados['playerInfo']['id']);
+    $dados['tasks'] = $this->conquistas->listar_tarefas();
 
     if($dados['pemissao'] != "Jogador"){
       echo "<script> 

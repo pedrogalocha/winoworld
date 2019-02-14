@@ -49,7 +49,7 @@
       </div><!--/row-->
       </div><!--/card-avatar-->
 </div>
-
+<?php $this->load->view('restrito/player/add_tarefas')?>
 
 <?php $this->load->view('footer')?>
     
