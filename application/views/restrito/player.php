@@ -22,35 +22,33 @@
             <li class="list-group-item text-right"><span class="pull-left"><strong>Missões Concluidas</strong></span> 37</li>
             <li class="list-group-item text-right"><span class="pull-left"><strong>Patente</strong></span> Soldado</li>
           </ul> 
-          
     </div><!--/col-3-->
     <div class="col-sm-9">
       <br>
       <h1 class="h1-player">Conquistas</h1>
-    	<div class="col-sm-3">       
-          <div class="tab-content">
-            <div class="tab-pane active" id="home">
-                <hr>
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                        <div class="card" style="width: 18rem;">
-                          <div class="card-body">
-                            <h5 class="card-title"><?php print_r($conquistas['nome_con']); ?></h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                          </div>
-                        </div>
-                        </div>
-                  </div>    
-                <hr>
-          </div><!--/tab-pane-->
-          </div><!--/tab-content-->
-        </div><!--/col-6-->
+        <div class="row" style="margin-left: 10%;">
+        <?php foreach ($conquistas as $acc){ ?>   
+          <div class="card mb-3 ml-3 " style="max-width: 190px;">
+            <div class="row no-gutters">
+              <div class="col-md-12">
+                <img src="<?php echo base_url('includes/img/'.$acc->imagem) ?>" class="card-img" alt="..." style="max-width: 188px;">
+              </div>
+              <div class="col-md-12">
+                <div class="card-body">
+                  <h5 class="card-title"><?php print_r($acc->nome_con); ?></h5>
+                  <p class="card-text"><?php print_r($acc->descricao); ?></p>
+                  <p class="card-text"><small class="text-muted"><?php print_r($acc->data); ?></small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php }?>
       </div>
       </div>
       </div><!--/row-->
       </div><!--/card-avatar-->
 </div>
+
+
 <?php $this->load->view('footer')?>
     
