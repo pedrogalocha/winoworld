@@ -18,7 +18,7 @@
           <ul class="list-group">
             <li class="list-group-item text-muted">Atividade <i class="fa fa-dashboard fa-1x"></i></li>
             <li class="list-group-item text-right"><span class="pull-left"><strong>Vida Atual</strong></span><?php print_r($playerInfo['hp']); ?></li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Zumbis Mortos</strong></span> 13</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong>Zumbis Mortos</strong></span> 350</li>
             <li class="list-group-item text-right"><span class="pull-left"><strong>Missões Concluidas</strong></span> 37</li>
             <li class="list-group-item text-right"><span class="pull-left"><strong>Patente</strong></span> Soldado</li>
           </ul> 
@@ -43,6 +43,7 @@
             </div>
           </div>
         <?php }?>
+        <?php $this->load->view('restrito/player/listar_tarefas')?>
       </div>
       </div>
       </div><!--/row-->

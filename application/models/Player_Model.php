@@ -36,4 +36,17 @@ class Player_Model extends CI_Model
         return null;
       }
     }
+
+    public function listar_tarefas($id_player){
+      $sql = "Select t.name_task, tf.data_conclusao, tf.quantidade, tf.n_chamado From task_feita tf
+      Inner Join players p on tf.player_id = p.id
+        Inner Join task t on tf.task_id = t.id
+        where p.id = $id_player;";
+      $heroe = $this->db->query($sql);
+      if($heroe!=null){
+        return $heroe->result();
+      } else {
+        return null;
+      }
+    }
 }

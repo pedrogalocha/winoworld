@@ -10,7 +10,7 @@
     <link rel="icon" href="<?php echo base_url('includes/img/fav_z.png') ?>" type="image/png" />
     <title>WinoWorld</title>
     <!-- Bootstrap CSS -->
-   
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link href="<?php echo base_url('includes/css/bootstrap.css') ?>" rel="stylesheet"/>
     <link href="<?php echo base_url('includes/vendors/linericon/style.css') ?>" rel="stylesheet"/>
     <link href="<?php echo base_url('includes/css/font-awesome.min.css') ?>" rel="stylesheet"/>
