@@ -9,9 +9,11 @@
         </button>
       </div>
       <div class="modal-body">
+      <form  method="POST" action=''> 
       <label for="sel1">Selecione a Missão</label>
         <div class="form-group">
-          <select class="form-control"  id="sel1" data-live-search="true">
+          <select class="form-control"  id="sel1" data-live-search="true" required>
+          <option><p><p></option>
           <?php foreach ($tasks as $tk){ ?> 
             <option id='<?= $tk->id; ?>'><?= $tk->name_task; ?></option>
           <?php }?>
@@ -20,15 +22,19 @@
         <br>
         <br>
         <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-  </div>
+          <label for="quantidade">Quantidade</label>
+            <input type="text" class="form-control bfh-number col-sm-3">
+        </div>
+        <div class="form-group">
+          <label for="quantidade">N° Chamado</label>
+            <input type="text" class="form-control bfh-number col-sm-3">
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
       </div>
+      </form>
     </div>
   </div>
 </div>

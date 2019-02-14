@@ -20,6 +20,7 @@
     <link href="<?php echo base_url('includes/vendors/nice-select/css/nice-select.css') ?>" rel="stylesheet"/>
     <link href="<?php echo base_url('includes/vendors/animate-css/animate.css') ?>" rel="stylesheet"/>
     <link href="<?php echo base_url('includes/vendors/flaticon/flaticon.css') ?>" rel="stylesheet"/>
+    
     <!-- main css -->
     <link href="<?php echo base_url('includes/css/style.css') ?>" rel="stylesheet"/>
   </head>

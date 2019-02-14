@@ -3881,4 +3881,11 @@ h6 {
   text-align: center;
 }
 
+/* Botão para adicionar tarefas */
+.botao-invisivel{
+  background: transparent;
+  border: none;
+  color: #3e3590;
+}
+
 /*# sourceMappingURL=style.css.map */

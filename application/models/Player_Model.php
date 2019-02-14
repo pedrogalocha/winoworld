@@ -49,7 +49,9 @@ class Player_Model extends CI_Model
     }
 
     public function listar_tarefas(){
-      $sql = "Select id,name_task,xp From task";
+      $sql = "SELECT id,name_task,xp FROM winoworld.task
+              where name_task != 'Eliminar Zumbi'
+              AND name_task != 'Tempo de missão diaria'";
       $heroe = $this->db->query($sql);
       if($heroe!=null){
         return $heroe->result();
