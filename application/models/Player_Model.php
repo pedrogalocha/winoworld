@@ -94,7 +94,7 @@ class Player_Model extends CI_Model
       $xpConvert = $this->db->query($xpSoma);
       $xp = $xpConvert->row_array();
       $xpTotal = implode(",", $xp);
-      
+
       //Atualizar XP das Tarefas
       $sql = "Update players set xp = $xpTotal where id = $id_player;";
       $this->db->query($sql);
@@ -103,5 +103,34 @@ class Player_Model extends CI_Model
       } else {
         return null;
       }
+    }
+
+    public function quantidade_chamado($id_player){
+      $sql = "Select SUM(tf.quantidade) total From task_feita tf
+      Inner Join players p on tf.player_id = p.id
+        where p.id = $id_player
+        AND tf.task_id = 1;";
+      $zombies = $this->db->query($sql);
+      $zv = $zombies->row_array();
+      $zombies_total = implode(",", $zv);
+      if($zombies!=null){
+        return $zombies_total;
+      } else {
+        return null;
+      }  
+    }
+
+    public function missoes_concluidas($id_player){
+      $sql = "Select COUNT(*) total From task_feita tf
+      Inner Join players p on tf.player_id = p.id
+        where p.id = $id_player";
+      $missoes = $this->db->query($sql);
+      $m1 = $missoes->row_array();
+      $missoes_total = implode(",", $m1);
+      if($missoes!=null){
+        return $missoes_total;
+      } else {
+        return null;
+      }  
     }
 }

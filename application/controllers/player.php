@@ -11,6 +11,8 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','tarefas');
     $this->load->model('Player_Model','tasks');
     $this->load->model('Player_Model','xpTotal');
+    $this->load->model('Player_Model','zumbis');
+    $this->load->model('Player_Model','missoes_concluidas');
   }
 
   public function index()
@@ -22,6 +24,8 @@ class player extends CI_Controller {
     $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id']);
     $dados['tasks'] = $this->tasks->listar_tarefas();
     $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id']);
+    $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['id']);
+    $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
 
     if($dados['pemissao'] != "Jogador"){
       echo "<script> 
