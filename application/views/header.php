@@ -10,8 +10,11 @@
     <link rel="icon" href="<?php echo base_url('includes/img/fav_z.png') ?>" type="image/png" />
     <title>WinoWorld</title>
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.1/css/mdb.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.css" />
     <link href="<?php echo base_url('includes/css/bootstrap.css') ?>" rel="stylesheet"/>
     <link href="<?php echo base_url('includes/vendors/linericon/style.css') ?>" rel="stylesheet"/>
     <link href="<?php echo base_url('includes/css/font-awesome.min.css') ?>" rel="stylesheet"/>

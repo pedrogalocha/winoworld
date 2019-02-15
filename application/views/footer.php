@@ -20,10 +20,16 @@
       </div>
     </footer>
     <!--================End Footer Area =================-->
-
+    <script>
+        $(document).ready(function () {
+          $('#dtBasicExample').DataTable();
+          $('.dataTables_length').addClass('bs-select');
+        });
+    </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="<?php echo base_url('includes/js/jquery-3.2.1.min.js') ?>"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
     <script src="<?php echo base_url('includes/js/popper.js') ?>"></script>
     <script src="<?php echo base_url('includes/js/bootstrap.min.js') ?>"></script>
     <script src="<?php echo base_url('includes/js/stellar.js') ?>"></script>
@@ -36,7 +42,8 @@
     <script src="<?php echo base_url('includes/vendors/counter-up/jquery.counterup.min.js') ?>"></script>
     <script src="<?php echo base_url('includes/vendors/counter-up/jquery.waypoints.min.js') ?>"></script>
     <script src="<?php echo base_url('includes/js/mail-script.js') ?>"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.js"></script>
 
     <!--gmaps Js-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>

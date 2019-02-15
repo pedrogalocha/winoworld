@@ -60,3 +60,4 @@ $route['login'] = 'Login';
 //Autenticado
 $route['Administrativo'] = 'adm';
 $route['Jogador'] = 'player';
+$route['AddTask'] = 'player/cadastrar_acionamento';

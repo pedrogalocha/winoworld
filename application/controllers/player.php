@@ -10,6 +10,7 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','conquistas');
     $this->load->model('Player_Model','tarefas');
     $this->load->model('Player_Model','tasks');
+    $this->load->model('Player_Model','xpTotal');
   }
 
   public function index()
@@ -18,8 +19,9 @@ class player extends CI_Controller {
     $dados['pemissao'] = $this->permissao->getPermissao($login);
     $dados['playerInfo'] = $this->playerInfo->listar_player($login);
     $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
-    $dados['tarefas'] = $this->conquistas->listar_tarefas_feitas($dados['playerInfo']['id']);
-    $dados['tasks'] = $this->conquistas->listar_tarefas();
+    $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id']);
+    $dados['tasks'] = $this->tasks->listar_tarefas();
+    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id']);
 
     if($dados['pemissao'] != "Jogador"){
       echo "<script> 
@@ -28,5 +30,42 @@ class player extends CI_Controller {
     }else{
       $this->load->view('restrito/player.php', $dados);
     }
+  }
+
+  public function cadastrar_acionamento(){
+
+    date_default_timezone_set('America/Sao_Paulo');
+    $datatime1 = new DateTime();
+
+    $data1  = $datatime1->format('Y-m-d H:i:s');
+
+    $dados_form = $this->input->post();
+    $dados_insert['task'] = $dados_form['name_task'];
+    $dados_insert['playerid'] = $dados_form['playerid'];
+    $dados_insert['quantidade'] = $dados_form['quantidade'];
+    if($dados_form['nchamado'] <=0){
+     $dados_insert['nchamado'] = 0;
+    }else{
+      $dados_insert['nchamado'] = $dados_form['nchamado'];
+    }
+    $dados_insert['data'] = $data1;
+    
+    $xp_task = $this->tarefas->pegar_xp($dados_insert);
+
+    $dados_insert['xp'] = $xp_task*$dados_insert['quantidade'];
+    
+    $prints = $this->tarefas->add_tarefas($dados_insert);
+    
+    if($prints == "Cadastrado"){
+      echo "<script> 
+      alert('Cadastro efetuado com sucesso.');
+    </script>";
+    redirect(base_url('Jogador'));
+    }else{
+      echo "<script> 
+      alert('Houve um erro ao tentar cadastar.'); window.location.href = 'Jogador';
+    </script>";
+    }
+    
   }
 }

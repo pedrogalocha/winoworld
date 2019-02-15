@@ -1,5 +1,4 @@
 <?php $this->load->view('header')?>
-
 <div class="container bootstrap snippet card-avatar">
     <div class="row">
   		<div class="col-sm-3"><h1><?php print_r($playerInfo['name']); ?></h1></div>
