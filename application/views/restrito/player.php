@@ -10,16 +10,14 @@
   		<div class="col-sm-3"><!--left col-->
       <div class="text-center">
         <img src="<?php echo base_url('includes/img/'.$playerInfo['avatar']) ?>" class="avatar img-circle img-thumbnail" alt="avatar">
-        <h6>Upload a different photo...</h6>
-        <input type="file" class="text-center center-block file-upload">
       </div></hr><br>
-
+      <a href=""><small id="emailHelp" class="form-text text-muted"><i class="fas fa-sync-alt"></i>Atualizar</small></a>
           <ul class="list-group">
-            <li class="list-group-item text-muted">Info <i class="fa fa-dashboard fa-1x"></i></li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Vida Atual</strong></span><?php print_r($playerInfo['hp']); ?></li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Zumbis Mortos</strong></span> <?php print_r($zumbis); ?></li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong>Missões Concluidas</strong></span> <?php print_r($missoes_concluidas); ?></li>
-            <li class="list-group-item text-right" title="Tempo Médio de Missão"><span class="pull-left"><strong>TMM</strong></span> 15:34:35</li>
+            <li class="list-group-item text-muted">Status</li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong><i class="fas fa-heart"></i></strong></span><?php print_r($playerInfo['hp']); ?></li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong><i class="fas fa-skull-crossbones"></i></strong></span> <?php print_r($zumbis); ?></li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong><i class="fas fa-tasks"></i></strong></span> <?php print_r($missoes_concluidas); ?></li>
+            <li class="list-group-item text-right" title="Tempo Médio de Missão"><span class="pull-left"><strong><i class="far fa-clock"></i></strong></span> <?php print_r($soma_sla); ?></li>
           </ul> 
     </div><!--/col-3-->
     <div class="col-sm-9">

@@ -9,7 +9,7 @@ class Player_Model extends CI_Model
     }
 
     public function listar_player($login){
-      $sql = "Select p.id, p.name,p.hp,p.level,c.class_name,u.username,p.avatar,p.xp,p.patent From players p 
+      $sql = "Select p.id, p.glpi_id , p.name,p.hp,p.level,c.class_name,u.username,p.avatar,p.xp,p.patent From players p 
       Inner Join users u on p.users_id = u.id 
         Inner Join class c on p.class_id = c.id
         where u.username = '$login'";
@@ -94,10 +94,6 @@ class Player_Model extends CI_Model
       $xpConvert = $this->db->query($xpSoma);
       $xp = $xpConvert->row_array();
       $xpTotal = implode(",", $xp);
-
-      //Atualizar XP das Tarefas
-      $sql = "Update players set xp = $xpTotal where id = $id_player;";
-      $this->db->query($sql);
       if($xpConvert!=null){
         return $xpConvert->result();
       } else {
@@ -105,20 +101,29 @@ class Player_Model extends CI_Model
       }
     }
 
-    public function quantidade_chamado($id_player){
-      $sql = "Select SUM(tf.quantidade) total From task_feita tf
-      Inner Join players p on tf.player_id = p.id
-        where p.id = $id_player
-        AND tf.task_id = 1;";
-      $zombies = $this->db->query($sql);
+    public function quantidade_chamado($id_glpi,$id_player){
+      $glpi = $this->load->database('glpi', TRUE);
+      $sql = "SELECT count(*) FROM winover_chamados.glpi_tickets t
+      Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
+      Inner Join winover_chamados.glpi_itilcategories i on t.itilcategories_id = i.id 
+      where date between '2019-02-01 00:00:00' and '2019-02-15 23:00:00' AND u.id = $id_glpi;";
+      $zombies = $glpi->query($sql);
       $zv = $zombies->row_array();
       $zombies_total = implode(",", $zv);
       if($zombies!=null){
+        $sql2 = "Update players set zumbis_mortos = $zombies_total where id = $id_player;";
+        $dog = $this->db->query($sql2);
         return $zombies_total;
       } else {
         return null;
       }  
     }
+
+    public function atualizando_banco($id_player, $zombies_total){
+      $sql2 = "Update winoworld.players set zumbis_mortos = $zombies_total where id = $id_player;";
+      $zombies_mortos = $this->db->query($sql2);
+    }
+
 
     public function missoes_concluidas($id_player){
       $sql = "Select COUNT(*) total From task_feita tf
@@ -133,4 +138,23 @@ class Player_Model extends CI_Model
         return null;
       }  
     }
+
+    public function somar_sla($id_player){
+      $glpi = $this->load->database('glpi', TRUE);
+      $sql = "SELECT SEC_TO_TIME(AVG(t.solve_delay_stat)) FROM winover_chamados.glpi_tickets t
+      Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
+      Inner Join winover_chamados.glpi_itilcategories i on t.itilcategories_id = i.id 
+      where date between '2019-02-01 00:00:00' and '2019-02-28 23:00:00' AND u.id = $id_player;";
+      $sla_total_segundos = $glpi->query($sql);
+      $sla_total = $sla_total_segundos->row_array();
+      $sla_segregado = implode(",", $sla_total);
+      $sla = substr($sla_segregado, 0,-5);
+ 
+      if($sla_total_segundos!=null){
+        return $sla;
+      } else {
+        return null;
+      }  
+    }
+   
 }
