@@ -11,7 +11,6 @@
       <div class="text-center">
         <img src="<?php echo base_url('includes/img/'.$playerInfo['avatar']) ?>" class="avatar img-circle img-thumbnail" alt="avatar">
       </div></hr><br>
-      <a href=""><small id="emailHelp" class="form-text text-muted"><i class="fas fa-sync-alt"></i>Atualizar</small></a>
           <ul class="list-group">
             <li class="list-group-item text-muted">Status</li>
             <li class="list-group-item text-right"><span class="pull-left"><strong><i class="fas fa-heart"></i></strong></span><?php print_r($playerInfo['hp']); ?></li>

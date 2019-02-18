@@ -86,7 +86,7 @@ class Player_Model extends CI_Model
       return $xptask;
     }
 
-    public function somar_xp($id_player){
+    public function somar_xp($id_player, $zumbis){
       //Pegar XP das Tarefas
       $xpSoma = "SELECT SUM(xp_total) FROM winoworld.task_feita tf
       Inner Join players p on tf.player_id = p.id
@@ -94,6 +94,9 @@ class Player_Model extends CI_Model
       $xpConvert = $this->db->query($xpSoma);
       $xp = $xpConvert->row_array();
       $xpTotal = implode(",", $xp);
+      $xp_final = $xpTotal + $zumbis;
+      $sql = "Update players SET xp = $xp_final WHERE id= $id_player";
+      $query_soma = $this->db->query($sql);
       if($xpConvert!=null){
         return $xpConvert->result();
       } else {
@@ -106,7 +109,7 @@ class Player_Model extends CI_Model
       $sql = "SELECT count(*) FROM winover_chamados.glpi_tickets t
       Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
       Inner Join winover_chamados.glpi_itilcategories i on t.itilcategories_id = i.id 
-      where date between '2019-02-01 00:00:00' and '2019-02-15 23:00:00' AND u.id = $id_glpi;";
+      where date between '2019-02-01 00:00:00' and '2019-02-28 23:00:00' AND u.id = $id_glpi;";
       $zombies = $glpi->query($sql);
       $zv = $zombies->row_array();
       $zombies_total = implode(",", $zv);
@@ -139,17 +142,18 @@ class Player_Model extends CI_Model
       }  
     }
 
-    public function somar_sla($id_player){
+    public function somar_sla($id_glpi, $id_player){
       $glpi = $this->load->database('glpi', TRUE);
       $sql = "SELECT SEC_TO_TIME(AVG(t.solve_delay_stat)) FROM winover_chamados.glpi_tickets t
       Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
       Inner Join winover_chamados.glpi_itilcategories i on t.itilcategories_id = i.id 
-      where date between '2019-02-01 00:00:00' and '2019-02-28 23:00:00' AND u.id = $id_player;";
+      where date between '2019-02-01 00:00:00' and '2019-02-28 23:00:00' AND u.id = $id_glpi;";
       $sla_total_segundos = $glpi->query($sql);
       $sla_total = $sla_total_segundos->row_array();
       $sla_segregado = implode(",", $sla_total);
       $sla = substr($sla_segregado, 0,-5);
- 
+      $sql2 = "Update players SET tma = '$sla' WHERE id= $id_player;";
+      $query_sql2 = $this->db->query($sql2);
       if($sla_total_segundos!=null){
         return $sla;
       } else {

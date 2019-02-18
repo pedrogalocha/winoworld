@@ -26,11 +26,12 @@ class player extends CI_Controller {
     $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
     $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id']);
     $dados['tasks'] = $this->tasks->listar_tarefas();
-    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id']);
     $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
+    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis']);
     $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['zumbis'],$dados['playerInfo']['id']);
-    $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id']);
+    $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
+    $dados['level'] = $this->verificar_level($dados['playerInfo']['id']);
 
     if($dados['pemissao'] != "Jogador"){
       echo "<script> 
@@ -75,6 +76,10 @@ class player extends CI_Controller {
       alert('Houve um erro ao tentar cadastar.'); window.location.href = 'Jogador';
     </script>";
     }
+    
+  }
+
+  public function verificar_level($id_player){
     
   }
 
