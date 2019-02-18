@@ -9,7 +9,7 @@ class Player_Model extends CI_Model
     }
 
     public function listar_player($login){
-      $sql = "Select p.id, p.glpi_id , p.name,p.hp,p.level,c.class_name,u.username,p.avatar,p.xp,p.patent From players p 
+      $sql = "Select p.id, p.glpi_id , p.name,p.hp,p.level,c.class_name,u.username,p.avatar,p.xp,p.patent, p.liberado From players p 
       Inner Join users u on p.users_id = u.id 
         Inner Join class c on p.class_id = c.id
         where u.username = '$login'";
@@ -159,6 +159,16 @@ class Player_Model extends CI_Model
       } else {
         return null;
       }  
+    }
+
+    public function subir_level($id_player,$level_up){
+      $sql = "update players set level = $level_up where id= $id_player;";
+      $query_xp = $this->db->query($sql);
+    }
+
+    public function evoluir_classe($id_player,$level){
+      $sql = "update players set level = $level_up where id= $id_player;";
+      $query_xp = $this->db->query($sql);
     }
    
 }

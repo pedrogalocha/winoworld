@@ -3,7 +3,11 @@
     <div class="row">
   		<div class="col-sm-3"><h1><?php print_r($playerInfo['name']); ?></h1></div>
       <div class="col-sm-3"><h1>Classe: <?php print_r($playerInfo['class_name']); ?></div>
-      <div class="col-sm-3"><h1>Level: <?php print_r($playerInfo['level']); ?></div>
+      <div class="col-sm-3"><h1>Level: <?php print_r($playerInfo['level']); ?> 
+      <?php if($playerInfo['liberado'] == 1){
+        echo '<button class="botao-invisivel" type="button" data-toggle="modal" data-target="#upLevel"><i class="far fa-plus-square"></i></button>';
+      }
+      ?></div>
       <div class="col-sm-3"><h1>XP Atual: <?php print_r($playerInfo['xp']); ?></div>
     </div>
     <div class="row">
@@ -46,6 +50,7 @@
       </div><!--/card-avatar-->
 </div>
 <?php $this->load->view('restrito/player/add_tarefas')?>
+<?php $this->load->view('restrito/player/up_level')?>
 
 <?php $this->load->view('footer')?>
     

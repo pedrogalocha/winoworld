@@ -8,7 +8,6 @@
           <th scope="col">Data Conclusão</th>
           <th scope="col">Quantidade/Vezes Efetuada</th>
           <th scope="col">N° Chamado</th>
-          <th scope="col">Ações</th>
         </tr>
       </thead>
 
@@ -19,8 +18,6 @@
             <td><?= $tar->data_conclusao; ?></td>
             <td><?= $tar->quantidade; ?></td>
             <td><?= $tar->n_chamado; ?></td>
-            <td>
-            <a href="#"><button type='button' class='btn btn-primary btn-sm'>Atualizar</button></a> 
           </td>
           </tr>
         <?php }?>
