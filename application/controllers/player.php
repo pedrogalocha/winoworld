@@ -79,11 +79,19 @@ class player extends CI_Controller {
     
   }
 
-  public function atualizar_level($id_player,$xp_total, $level, $resposta){
-  
-      if($xp_total>=1000 && $level=0){
-        $level_up = 1;
-        $dados['subir_level'] = $this->validar_xp->subir_level1($id_player,$level_up);
+  public function carregar_classes($id_player){
+    $this->load->model('Classes_Model','pegar_classes');
+
+    $dados['pegar_classes'] = $this->pegar_classes->pegar_classes($id_player);
+
+  }
+
+  public function atualizar_level($id_player,$xp_total, $liberado, $level_id){
+      $dados['classes'] = $this->validar_xp->verificar_level($id_player,$level_up);
+
+      if($xp_total>=1000 && $level=0 && $liberado=1){
+        $level_id = 2;
+        $dados['subir_level'] = $this->validar_xp->verificar_level($id_player,$level_up);
       }
   }
 }
