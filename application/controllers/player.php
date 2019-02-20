@@ -17,6 +17,7 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','soma_sla');
     $this->load->model('Player_Model','sla_correto');
     $this->load->model('Player_Model','validar_xp');
+    $this->load->model('Classes_Model','pegar_classes');
   }
 
   public function index()
@@ -32,6 +33,8 @@ class player extends CI_Controller {
     $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['zumbis'],$dados['playerInfo']['id']);
     $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
+    $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
+    
 
     if($dados['pemissao'] != "Jogador"){
       echo "<script> 
@@ -80,9 +83,8 @@ class player extends CI_Controller {
   }
 
   public function carregar_classes($id_player){
-    $this->load->model('Classes_Model','pegar_classes');
+    
 
-    $dados['pegar_classes'] = $this->pegar_classes->pegar_classes($id_player);
 
   }
 
