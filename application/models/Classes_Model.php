@@ -16,12 +16,15 @@ class Classes_Model extends CI_Model
       return $heroe->result();
     }
 
-    public function pegar_habilidades($id_classe){
+    public function pegar_habilidades($class_id){
+      $class_id = $_POST['id_class'];
+      echo $class_id;
       $sql = "SELECT c.id, c.class_name,h.nome, h.desc, h.efeito FROM class c
       Inner Join habilidades_kit hk on c.id_habilidade = hk.id
       Inner Join habilidades h on hk.hab1 = h.id 
       or hk.hab2 = h.id 
-      or hk.hab3 = h.id;";
+      or hk.hab3 = h.id
+      where c.id = $class_id;";
       $heroe = $this->db->query($sql);
       
       return $heroe->result();

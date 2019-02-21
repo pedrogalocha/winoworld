@@ -18,6 +18,14 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','sla_correto');
     $this->load->model('Player_Model','validar_xp');
     $this->load->model('Classes_Model','pegar_classes');
+    $this->load->model('Classes_Model','pegar_habilidade');
+    $this->load->model('Player_Model','sem_categoria');
+    $this->load->model('Player_Model','perde_vida_sem_categoria');
+    $this->load->model('Player_Model','verifica_vida');
+    $this->load->model('Player_Model','registra_morte');
+    $this->load->model('Player_Model','nova_vida');
+    $this->load->model('Player_Model','matar_personagem');
+    $this->load->model('Player_Model','listar_historico');
   }
 
   public function index()
@@ -25,15 +33,19 @@ class player extends CI_Controller {
     $login = $this->session->userdata('nome');
     $dados['pemissao'] = $this->permissao->getPermissao($login);
     $dados['playerInfo'] = $this->playerInfo->listar_player($login);
+    $dados['verifica_vida'] = $this->verifica_vida->veriricar_vivo($dados['playerInfo']['id']);
+    $dados['playerHistorico'] = $this->playerInfo->listar_historico($dados['playerInfo']['name'], $dados['verifica_vida']);
     $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
     $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id']);
     $dados['tasks'] = $this->tasks->listar_tarefas();
-    $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
+    $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['verifica_vida'], $dados['playerHistorico']['zumbis_mortos']);
     $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis']);
     $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
-    $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['zumbis'],$dados['playerInfo']['id']);
-    $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
+    $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['playerInfo']['id'],$dados['zumbis']);
+    $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp']);
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
+    $dados['sem_categoria'] = $this->sem_categoria->sem_categoria($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
+    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp']);
     
 
     if($dados['pemissao'] != "Jogador"){
@@ -41,7 +53,20 @@ class player extends CI_Controller {
               alert('Você não tem permissão para acessar esta area'); window.location.href = 'Login';
             </script>";
     }else{
-      $this->load->view('restrito/player.php', $dados);
+      if($dados['verifica_vida'] == 1){
+        $dados['nova_vida'] = $this->nova_vida->registro_vida($dados['playerInfo']['id'],$dados['playerInfo']['class_name'],$dados['playerInfo']['name'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'],$dados['zumbis'],$dados['soma_sla']);
+
+        echo "<script> 
+          alert('Seu Personagem Morreu, você tem mais uma chance, com novo personagem. ');
+        </script>";
+        $this->load->view('restrito/player.php', $dados);
+      } if($dados['verifica_vida'] == 2) {
+        echo "<script> 
+                alert('Você é um pessimo sobrevivente, morreu duas vezes em 2 encarnações? Bem tente jogar novamente mês que vem.');
+              </script>";
+      }else {
+        $this->load->view('restrito/player.php', $dados);
+      }
     }
   }
 
@@ -82,10 +107,10 @@ class player extends CI_Controller {
     
   }
 
-  public function carregar_classes($id_player){
-    
+  public function carregar_habilidades($class_id){
+    $dados['pegar_habilidades'] = $this->pegar_habilidade->pegar_habilidades($class_id);
 
-
+    echo $dados['pegar_habilidades'][1]->desc;
   }
 
   public function atualizar_level($id_player,$xp_total, $liberado, $level_id){

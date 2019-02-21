@@ -23,6 +23,22 @@ class Player_Model extends CI_Model
       }
     }
 
+    public function listar_historico($player_name, $second){
+      if($second = 1){
+      $sql = "SELECT l.nome_jogador, l.zumbis_mortos FROM winoworld.log_jogadores l
+      Inner Join players p on l.nome_jogador = p.name where l.nome_jogador = '$player_name';";
+      $heroe = $this->db->query($sql);
+      $resultado = $heroe->row_array();
+      if($resultado!=null){
+        return $resultado;
+      } else {
+        return null;
+      }
+      } else {
+        return null;
+      }
+    }
+
     public function listar_conquistas($id_player){
       $sql = "Select c.id,c.nome_con, c.xp, c.descricao,p.name,cf.data,c.imagem From conquistas_feitas cf
       Inner Join players p on cf.jogador_id = p.id
@@ -105,7 +121,7 @@ class Player_Model extends CI_Model
       }
     }
 
-    public function quantidade_chamado($id_glpi,$id_player){
+    public function quantidade_chamado($id_glpi,$id_player,$vida_2,$zumbis_historico){
       $glpi = $this->load->database('glpi', TRUE);
       $sql = "SELECT count(*) FROM winover_chamados.glpi_tickets t
       Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
@@ -114,10 +130,18 @@ class Player_Model extends CI_Model
       $zombies = $glpi->query($sql);
       $zv = $zombies->row_array();
       $zombies_total = implode(",", $zv);
+      echo $vida_2;
       if($zombies!=null){
-        $sql2 = "Update players set zumbis_mortos = $zombies_total where id = $id_player;";
-        $dog = $this->db->query($sql2);
-        return $zombies_total;
+        if($vida_2 == 1){
+          $segunda_chance = $zombies_total - $zumbis_historico;
+          $sql2 = "Update players set zumbis_mortos = $segunda_chance where id = $id_player;";
+          $dog = $this->db->query($sql2);
+          return $segunda_chance;
+        }else{
+          $sql2 = "Update players set zumbis_mortos = $zombies_total where id = $id_player;";
+          $dog = $this->db->query($sql2);
+          return $zombies_total;
+        }
       } else {
         return null;
       }  
@@ -143,7 +167,7 @@ class Player_Model extends CI_Model
       }  
     }
 
-    public function somar_sla($id_glpi, $id_player){
+    public function somar_sla($id_glpi, $id_player, $hp){
       $glpi = $this->load->database('glpi', TRUE);
       $sql = "SELECT SEC_TO_TIME(AVG(t.solve_delay_stat)) FROM winover_chamados.glpi_tickets t
       Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
@@ -162,9 +186,71 @@ class Player_Model extends CI_Model
       }  
     }
 
+    public function sem_categoria($id_glpi){
+      $glpi = $this->load->database('glpi', TRUE);
+      $sql = "SELECT COUNT(*) FROM winover_chamados.glpi_tickets 
+      where date between '2019-02-01 00:00:00' and '2019-02-28 23:00:00' 
+      and users_id_lastupdater = $id_glpi
+      and itilcategories_id = 0;";
+      $total_query = $glpi->query($sql);
+      $total_array = $total_query->row_array();
+      $total_sem_categoria = implode(",", $total_array);
+
+      return $total_sem_categoria;
+    }
+
+    public function calcular_vida_semcat($id_player, $total_sem_categoria,$hp){
+      $dano_total = $total_sem_categoria * 6;
+      $vida_perdida = $hp - $dano_total;
+
+      if($vida_perdida < 0 ){
+        $vida_perdida = 0;
+        $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
+        // $query_vida = $this->db->query($sql_update_vida);
+      }else{
+        $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
+        // $query_vida = $this->db->query($sql_update_vida);
+      }
+
+    }
+
     public function verificar_level($id_player,$level_id){
 
     }
+
+    public function veriricar_vivo($id_player){
+      $sql_verificar_vida = "select Count(p.name) from players p
+      where hp <= 0 and id= $id_player;";
+      $status_vida = $this->db->query($sql_verificar_vida);
+      $qtd_mortes = $status_vida->row_array();
+      $mortes_total = implode(",", $qtd_mortes);
+
+      return $mortes_total;
+    }
+
+
+    public function registro_vida($id, $class_id, $name, $level_id, $xp, $zumbis_mortos, $tma){
+      $sql_log_vida = "INSERT INTO log_jogadores VALUES (null,'$name', $xp, $level_id, '$class_id', NOW(), '$tma', '$zumbis_mortos');";
+      $registrando_morte = $this->db->query($sql_log_vida);
+    }
+
+    public function matar_personagem($id_player){
+      $sql_matando = "Update players set class_id = 1 where id = $id_player;"; 
+      $sql_matando1 = "Update players set hp = 50 where id = $id_player; ";
+      $sql_matando2 = "Update players set patent = null where id = $id_player;";
+      $sql_matando3 = "Update players set xp = 0 where id = $id_player;";
+      $sql_matando4 = "Update players set liberado = 0 where id = $id_player;";
+      $sql_matando5 = "Update players set bloqueio = 0 where id = $id_player;";
+
+      $this->db->query($sql_matando);
+      $this->db->query($sql_matando1);
+      $this->db->query($sql_matando2);
+      $this->db->query($sql_matando3);
+      $this->db->query($sql_matando4);
+      $this->db->query($sql_matando5);
+    }
+
+
 
     // public function evoluir_classe($id_player,$level,$liberado,$classe){
     //   if($liberado == 1){

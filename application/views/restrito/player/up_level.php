@@ -13,6 +13,28 @@ function exibeMsg( valor )
             }
         }
 
+function altera_habilidade( id_class )
+        {
+            switch (id_class)
+            {
+                case '':
+                document.getElementById( 'txt' ).innerHTML = 'Nenhum valor informado';
+                break;
+
+                default:
+                var target_url = "http://localhost/winoworld/player/carregar_habilidades";
+                var data_to_be_sent = id_class;
+                alert(data_to_be_sent)
+                $.ajax ({
+                url : target_url,
+                type: 'POST', 
+                data: {id_class: data_to_be_sent}, 
+                }); 
+                return false;
+                break;
+           }
+        }
+
 function alteraAvatar( avatar )
         {
             switch (avatar)
@@ -33,7 +55,7 @@ function alteraAvatar( avatar )
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Cadastrar Tarefa</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Selecione sua Classe</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -45,7 +67,7 @@ function alteraAvatar( avatar )
       </div></hr><br>
       <label for="sel1">Selecione a Classe</label>
         <div class="form-group">
-          <select class="form-control" data-toggle="tooltip" name="name_task" id="sel1"  onchange="exibeMsg(this.options[this.selectedIndex].title); alteraAvatar(this.options[this.selectedIndex].id)" required>
+          <select class="form-control" data-toggle="tooltip" name="name_task" id="sel1"  onchange="exibeMsg(this.options[this.selectedIndex].title); alteraAvatar(this.options[this.selectedIndex].id); altera_habilidade(this.options[this.selectedIndex].value)" required>
           <option value=""><p>--Selecione--<p></option>
           <?php foreach ($pegar_classes as $pc){ ?> 
             <option value='<?= $pc->id; ?>' title="<?= $pc->descricao; ?>" id="<?= $pc->avatar; ?>"><?= $pc->class_name; ?></option>
@@ -60,8 +82,9 @@ function alteraAvatar( avatar )
             <p id="txt" name="descricao"><?php print_r($pc->descricao) ?> </p>
         </div>
         <div class="form-group">
-          <label for="quantidade">N° Chamado</label>
-            <input type="text" name="nchamado" class="form-control bfh-number col-sm-3">
+          <label for="quantidade">Habilidades:</label>
+          <br>
+         <input type="text" name="nchamado" class="form-control bfh-number col-sm-3">
         </div>
       </div>
       <div class="modal-footer">
