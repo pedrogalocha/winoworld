@@ -197,33 +197,38 @@ class Player_Model extends CI_Model
       return $total_sem_categoria;
     }
 
-    public function calcular_vida_semcat($id_player, $total_sem_categoria,$hp,$vida,$historico){
-      // if($vida == 1){
-      //   $nova_categoria = $total_sem_categoria - $historico;
-      //   $dano_total = $nova_categoria * 6;
-      //   $vida_perdida = $hp - $dano_total;
-      //   if($vida_perdida < 0 ){
-      //     $zerado = 0;
-      //     $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
-      //     //$query_vida = $this->db->query($sql_update_vida);
-      //   }else{
-      //     $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
-      //     //$query_vida = $this->db->query($sql_update_vida);
-      //   }
-      // } else {
+    public function calcular_vida_semcat($id_player, $total_sem_categoria,$hp,$vida){ 
+      //Pegando resultado da aux e aramazenando em variavel
+      $sql_select_aux = "Select log_zumbis from zumbis_aux where id_player = $id_player;";
+      $query_select_aux = $this->db->query($sql_select_aux);
+      $aux_log_zumbis = $query_select_aux->row_array();
+      $log_zumbis = implode(",", $aux_log_zumbis);
 
-      echo $total_sem_categoria;
-      $dano_total = $total_sem_categoria * 6;
-      $vida_perdida = $hp - $dano_total;
-      if($vida_perdida < 0 ){
-        $vida_perdida = 0;
-        $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
-        //$query_vida = $this->db->query($sql_update_vida);
-      }else{
-        $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
-       // $query_vida = $this->db->query($sql_update_vida);
+      if($log_zumbis  != $total_sem_categoria){
+
+        //Armazenando AUX de Zumbis mortos
+        $sql_aux = "Update zumbis_aux SET log_zumbis = $total_sem_categoria WHERE id= $id_player;";
+        $query_aux = $this->db->query($sql_aux);
+
+        //Subtraindo quantidade de Zumbis mortos anteriormente, com o atual.
+        $total_atual = $total_sem_categoria - $log_zumbis;
+
+        //Calculo perda de vida
+        $dano_total = $total_atual * 6;
+        $vida_perdida = $hp - $dano_total;
+
+        echo $vida_perdida;
+
+        if($vida_perdida < 0 ){
+          $vida_perdida = 0;
+          $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
+          $query_vida = $this->db->query($sql_update_vida);
+        }else{
+          $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
+          $query_vida = $this->db->query($sql_update_vida);
+        }
+
       }
-    
 
     }
 

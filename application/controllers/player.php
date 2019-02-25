@@ -45,7 +45,7 @@ class player extends CI_Controller {
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['playerInfo']['id'],$dados['zumbis']);
     $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp']);
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
-    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['verifica_vida'], $dados['playerHistorico']['sem_categoria']) ;
+    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['verifica_vida']) ;
     
 
     if($dados['pemissao'] != "Jogador"){
@@ -64,6 +64,7 @@ class player extends CI_Controller {
         echo "<script> 
                 alert('Você é um pessimo sobrevivente, morreu duas vezes em 2 encarnações? Bem tente jogar novamente mês que vem.');
               </script>";
+              $this->load->view('index.php');
       }else {
         $this->load->view('restrito/player.php', $dados);
       }
