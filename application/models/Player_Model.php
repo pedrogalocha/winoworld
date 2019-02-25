@@ -24,7 +24,7 @@ class Player_Model extends CI_Model
     }
 
     public function listar_historico($player_name, $second){
-      if($second = 1){
+      if($second == 1){
       $sql = "SELECT l.nome_jogador, l.zumbis_mortos, l.sem_categoria FROM winoworld.log_jogadores l
       Inner Join players p on l.nome_jogador = p.name where l.nome_jogador = '$player_name';";
       $heroe = $this->db->query($sql);
@@ -121,7 +121,7 @@ class Player_Model extends CI_Model
       }
     }
 
-    public function quantidade_chamado($id_glpi,$id_player,$vida_2,$zumbis_historico){
+    public function quantidade_chamado($id_glpi,$id_player,$vida,$zumbis_historico){
       $glpi = $this->load->database('glpi', TRUE);
       $sql = "SELECT count(*) FROM winover_chamados.glpi_tickets t
       Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
@@ -131,7 +131,7 @@ class Player_Model extends CI_Model
       $zv = $zombies->row_array();
       $zombies_total = implode(",", $zv);
       if($zombies!=null){
-        if($vida_2 == 1){
+        if($vida == 1 || $vida == 2){
           $segunda_chance = $zombies_total - $zumbis_historico;
           $sql2 = "Update players set zumbis_mortos = $segunda_chance where id = $id_player;";
           $dog = $this->db->query($sql2);
@@ -217,8 +217,6 @@ class Player_Model extends CI_Model
         $dano_total = $total_atual * 6;
         $vida_perdida = $hp - $dano_total;
 
-        echo $vida_perdida;
-
         if($vida_perdida < 0 ){
           $vida_perdida = 0;
           $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
@@ -236,16 +234,54 @@ class Player_Model extends CI_Model
 
     }
 
-    public function veriricar_vivo($id_player){
-      $sql_verificar_vida = "select Count(p.name) from players p
-      where hp <= 0 and id = $id_player or chance = 1;";
+    public function verificar_vida($id_player){
+      $sql_verificar_vida = "select hp from players p where id = $id_player;";
       $status_vida = $this->db->query($sql_verificar_vida);
+      
       $qtd_mortes = $status_vida->row_array();
-      $mortes_total = implode(",", $qtd_mortes);
+      $status_hp = implode(",", $qtd_mortes);
+      return $status_hp;
 
-      return $mortes_total;
+
     }
 
+    public function verificar_chance($id_player){
+
+      //Verificando Chance
+      $sql_verificar_chance = "Select chance from players where id = $id_player and chance != 0;";
+      $status_chance = $this->db->query($sql_verificar_chance);
+      if($status_chance->num_rows() != 0){
+        $qtd_chance_array = $status_chance->row_array();
+        $chance = implode(",", $qtd_chance_array);
+        return $chance;
+      }else{
+        return $chance = 0;
+      }
+      
+      
+    }
+
+    public function atualiza_chance($id_player, $status_hp, $chance){
+      if($status_hp == 0 && $chance == 0){
+          $sql_update_chance = "Update players set chance = 1 where id = $id_player;";
+          $update_chance = $this->db->query($sql_update_chance);
+          $sql_captura_chance = "Select chance from players where id = $id_player";
+          $query_captura_chance = $this->db->query($sql_captura_chance);
+          $array_captura_chance = $query_captura_chance->row_array();
+          $chance_atual = implode(",", $array_captura_chance);
+          return $chance_atual;
+      } else
+      if($status_hp <= 0 && $chance == 1) {
+          $sql_update_chance = "Update players set chance = 2 where id = $id_player;";
+          $update_chance = $this->db->query($sql_update_chance);
+          $sql_captura_chance = "Select chance from players where id = $id_player";
+          $query_captura_chance = $this->db->query($sql_captura_chance);
+          $array_captura_chance = $query_captura_chance->row_array();
+          $chance_atual = implode(",", $array_captura_chance);
+    
+          return $chance_atual;
+      } 
+      }
 
     public function registro_vida($id, $class_id, $name, $level_id, $xp, $zumbis_mortos, $tma, $sem_categoria){
       $sql_log_vida = "INSERT INTO log_jogadores VALUES (null,'$name', $xp, $level_id, '$class_id', NOW(), '$tma', $zumbis_mortos, $sem_categoria);";
@@ -253,29 +289,18 @@ class Player_Model extends CI_Model
     }
 
     public function matar_personagem($id_player){
-      $sql_matando = "Update players set class_id = 1 where id = $id_player;"; 
+      $sql_matando =  "Update players set class_id = 1 where id = $id_player;"; 
       $sql_matando1 = "Update players set hp = 50 where id = $id_player; ";
       $sql_matando2 = "Update players set patent = null where id = $id_player;";
       $sql_matando3 = "Update players set xp = 0 where id = $id_player;";
       $sql_matando4 = "Update players set liberado = 0 where id = $id_player;";
-      $sql_matando5 = "Update players set bloqueio = 0 where id = $id_player;";
 
       $this->db->query($sql_matando);
       $this->db->query($sql_matando1);
       $this->db->query($sql_matando2);
       $this->db->query($sql_matando3);
       $this->db->query($sql_matando4);
-      $this->db->query($sql_matando5);
+
     }
-
-
-
-    // public function evoluir_classe($id_player,$level,$liberado,$classe){
-    //   if($liberado == 1){
-    //     $sql = "update players set level = $level_up where id= $id_player;";
-    //     $query_xp = $this->db->query($sql);
-    //   }
-
-    // }
    
 }
