@@ -119,9 +119,13 @@ class player extends CI_Controller {
   }
 
   public function carregar_habilidades($class_id){
+    $id_class = $this->input->post('id_class');
+  
     $dados['pegar_habilidades'] = $this->pegar_habilidade->pegar_habilidades($class_id);
-
-    echo $dados['pegar_habilidades'][1]->desc;
+    echo $class_id;
+    echo "<script> 
+      alert('Vai caraio.' + $id_class)
+    </script>";
   }
 
   public function atualizar_level($id_player,$xp_total, $liberado, $level_id){

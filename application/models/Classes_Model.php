@@ -17,7 +17,6 @@ class Classes_Model extends CI_Model
     }
 
     public function pegar_habilidades($class_id){
-      $class_id = $_POST['id_class'];
       echo $class_id;
       $sql = "SELECT c.id, c.class_name,h.nome, h.desc, h.efeito FROM class c
       Inner Join habilidades_kit hk on c.id_habilidade = hk.id
@@ -27,6 +26,6 @@ class Classes_Model extends CI_Model
       where c.id = $class_id;";
       $heroe = $this->db->query($sql);
       
-      return $heroe->result();
+      print_r($heroe->result());
     }
 }

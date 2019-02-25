@@ -22,9 +22,9 @@ function altera_habilidade( id_class )
                 break;
 
                 default:
-                var target_url = "http://localhost/winoworld/player/carregar_habilidades";
+                var target_url = "http://localhost/winoworld/player/carregar_habilidades/";
                 var data_to_be_sent = id_class;
-                alert(data_to_be_sent)
+                alert(data_to_be_sent);
                 $.ajax ({
                 url : target_url,
                 type: 'POST', 

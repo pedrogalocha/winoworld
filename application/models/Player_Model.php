@@ -204,14 +204,17 @@ class Player_Model extends CI_Model
       $aux_log_zumbis = $query_select_aux->row_array();
       $log_zumbis = implode(",", $aux_log_zumbis);
 
+
       if($log_zumbis  != $total_sem_categoria){
 
         //Armazenando AUX de Zumbis mortos
         $sql_aux = "Update zumbis_aux SET log_zumbis = $total_sem_categoria WHERE id= $id_player;";
         $query_aux = $this->db->query($sql_aux);
 
+
         //Subtraindo quantidade de Zumbis mortos anteriormente, com o atual.
         $total_atual = $total_sem_categoria - $log_zumbis;
+
 
         //Calculo perda de vida
         $dano_total = $total_atual * 6;
@@ -303,4 +306,6 @@ class Player_Model extends CI_Model
 
     }
    
+
+    
 }
