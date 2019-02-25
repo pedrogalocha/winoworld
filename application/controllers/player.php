@@ -33,6 +33,7 @@ class player extends CI_Controller {
     $login = $this->session->userdata('nome');
     $dados['pemissao'] = $this->permissao->getPermissao($login);
     $dados['playerInfo'] = $this->playerInfo->listar_player($login);
+    $dados['sem_categoria'] = $this->sem_categoria->sem_categoria($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
     $dados['verifica_vida'] = $this->verifica_vida->veriricar_vivo($dados['playerInfo']['id']);
     $dados['playerHistorico'] = $this->playerInfo->listar_historico($dados['playerInfo']['name'], $dados['verifica_vida']);
     $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
@@ -44,8 +45,7 @@ class player extends CI_Controller {
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['playerInfo']['id'],$dados['zumbis']);
     $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp']);
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
-    $dados['sem_categoria'] = $this->sem_categoria->sem_categoria($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
-    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp']);
+    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['verifica_vida'], $dados['playerHistorico']['sem_categoria']) ;
     
 
     if($dados['pemissao'] != "Jogador"){
@@ -53,8 +53,8 @@ class player extends CI_Controller {
               alert('Você não tem permissão para acessar esta area'); window.location.href = 'Login';
             </script>";
     }else{
-      if($dados['verifica_vida'] == 1){
-        $dados['nova_vida'] = $this->nova_vida->registro_vida($dados['playerInfo']['id'],$dados['playerInfo']['class_name'],$dados['playerInfo']['name'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'],$dados['zumbis'],$dados['soma_sla']);
+      if($dados['verifica_vida'] == 1 && $dados['playerInfo']['hp'] <= 0){
+        $dados['nova_vida'] = $this->nova_vida->registro_vida($dados['playerInfo']['id'],$dados['playerInfo']['class_name'],$dados['playerInfo']['name'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'],$dados['zumbis'],$dados['soma_sla'],$dados['sem_categoria']);
 
         echo "<script> 
           alert('Seu Personagem Morreu, você tem mais uma chance, com novo personagem. ');

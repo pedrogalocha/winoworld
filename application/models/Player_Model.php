@@ -9,7 +9,7 @@ class Player_Model extends CI_Model
     }
 
     public function listar_player($login){
-      $sql = "Select p.id, p.glpi_id , p.name,p.hp,l.level,c.class_name,u.username,p.avatar,p.xp,p.patent, p.liberado From players p 
+      $sql = "Select p.id, p.glpi_id ,p.chance, p.name,p.hp,l.level,c.class_name,u.username,p.avatar,p.xp,p.patent, p.liberado From players p 
       Inner Join users u on p.users_id = u.id
       Inner Join level l on p.level_id = l.id 
         Inner Join class c on p.class_id = c.id
@@ -25,7 +25,7 @@ class Player_Model extends CI_Model
 
     public function listar_historico($player_name, $second){
       if($second = 1){
-      $sql = "SELECT l.nome_jogador, l.zumbis_mortos FROM winoworld.log_jogadores l
+      $sql = "SELECT l.nome_jogador, l.zumbis_mortos, l.sem_categoria FROM winoworld.log_jogadores l
       Inner Join players p on l.nome_jogador = p.name where l.nome_jogador = '$player_name';";
       $heroe = $this->db->query($sql);
       $resultado = $heroe->row_array();
@@ -130,7 +130,6 @@ class Player_Model extends CI_Model
       $zombies = $glpi->query($sql);
       $zv = $zombies->row_array();
       $zombies_total = implode(",", $zv);
-      echo $vida_2;
       if($zombies!=null){
         if($vida_2 == 1){
           $segunda_chance = $zombies_total - $zumbis_historico;
@@ -195,22 +194,36 @@ class Player_Model extends CI_Model
       $total_query = $glpi->query($sql);
       $total_array = $total_query->row_array();
       $total_sem_categoria = implode(",", $total_array);
-
       return $total_sem_categoria;
     }
 
-    public function calcular_vida_semcat($id_player, $total_sem_categoria,$hp){
+    public function calcular_vida_semcat($id_player, $total_sem_categoria,$hp,$vida,$historico){
+      // if($vida == 1){
+      //   $nova_categoria = $total_sem_categoria - $historico;
+      //   $dano_total = $nova_categoria * 6;
+      //   $vida_perdida = $hp - $dano_total;
+      //   if($vida_perdida < 0 ){
+      //     $zerado = 0;
+      //     $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
+      //     //$query_vida = $this->db->query($sql_update_vida);
+      //   }else{
+      //     $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
+      //     //$query_vida = $this->db->query($sql_update_vida);
+      //   }
+      // } else {
+
+      echo $total_sem_categoria;
       $dano_total = $total_sem_categoria * 6;
       $vida_perdida = $hp - $dano_total;
-
       if($vida_perdida < 0 ){
         $vida_perdida = 0;
         $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
-        // $query_vida = $this->db->query($sql_update_vida);
+        //$query_vida = $this->db->query($sql_update_vida);
       }else{
         $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
-        // $query_vida = $this->db->query($sql_update_vida);
+       // $query_vida = $this->db->query($sql_update_vida);
       }
+    
 
     }
 
@@ -220,7 +233,7 @@ class Player_Model extends CI_Model
 
     public function veriricar_vivo($id_player){
       $sql_verificar_vida = "select Count(p.name) from players p
-      where hp <= 0 and id= $id_player;";
+      where hp <= 0 and id = $id_player or chance = 1;";
       $status_vida = $this->db->query($sql_verificar_vida);
       $qtd_mortes = $status_vida->row_array();
       $mortes_total = implode(",", $qtd_mortes);
@@ -229,8 +242,8 @@ class Player_Model extends CI_Model
     }
 
 
-    public function registro_vida($id, $class_id, $name, $level_id, $xp, $zumbis_mortos, $tma){
-      $sql_log_vida = "INSERT INTO log_jogadores VALUES (null,'$name', $xp, $level_id, '$class_id', NOW(), '$tma', '$zumbis_mortos');";
+    public function registro_vida($id, $class_id, $name, $level_id, $xp, $zumbis_mortos, $tma, $sem_categoria){
+      $sql_log_vida = "INSERT INTO log_jogadores VALUES (null,'$name', $xp, $level_id, '$class_id', NOW(), '$tma', $zumbis_mortos, $sem_categoria);";
       $registrando_morte = $this->db->query($sql_log_vida);
     }
 
