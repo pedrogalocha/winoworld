@@ -61,4 +61,5 @@ $route['login'] = 'Login';
 $route['Administrativo'] = 'adm';
 $route['Jogador'] = 'player';
 $route['AddTask'] = 'player/cadastrar_acionamento';
-$route['Habilidades/(:num)'] = 'player/carregar_habilidades';
+$route['Habilidades'] = 'player/carregar_habilidades';
+

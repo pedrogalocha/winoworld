@@ -22,13 +22,21 @@ function altera_habilidade( id_class )
                 break;
 
                 default:
-                var target_url = "http://localhost/winoworld/player/carregar_habilidades/";
+                var target_url = "<?=base_url()?>player/carregar_habilidades/";
                 var data_to_be_sent = id_class;
                 alert(data_to_be_sent);
                 $.ajax ({
                 url : target_url,
+                dataType : "html",
                 type: 'POST', 
                 data: {id_class: data_to_be_sent}, 
+                error: function(xhr, status, error) {
+                  alert('deu ruim');
+                },
+                success: function(results){
+                  alert('foi');
+                  alert(results);
+                }
                 }); 
                 return false;
                 break;
