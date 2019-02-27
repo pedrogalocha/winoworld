@@ -140,7 +140,7 @@ class player extends CI_Controller {
     $this->load->model('Classes_Model','atualizar_classe');
     $dados['atualizar_classe'] = $this->atualizar_classe->atualizar_classe($id_player, $id_class, $id_level, $liberado);
 
-    //redirect(base_url('Jogador'));
+    redirect(base_url('Jogador'));
   }
 
 }

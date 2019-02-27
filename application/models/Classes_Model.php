@@ -40,7 +40,7 @@ class Classes_Model extends CI_Model
       $sql_update_liberado = "UPDATE players set liberado = 0 where id = $id_player;";
       $query_update_liberado = $this->db->query($sql_update_liberado);
 
-
+      //Ao subir para o nivel 1, o ID_LEVEL vem 1, mesmo no banco estando 2....
       if($id_class == 2 && $id_level == 1){
         $vida = 80;
 
