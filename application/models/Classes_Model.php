@@ -35,13 +35,17 @@ class Classes_Model extends CI_Model
     public function atualizar_classe($id_player, $id_class, $id_level, $liberado){
 
       $sql_update_classe = "UPDATE players set class_id = $id_class where id = $id_player;";
-      $query_update = $this->db->query($sql_update_classe);
+      $query_update_classe = $this->db->query($sql_update_classe);
 
       $sql_update_liberado = "UPDATE players set liberado = 0 where id = $id_player;";
-      $query_update = $this->db->query($sql_update_liberado);
+      $query_update_liberado = $this->db->query($sql_update_liberado);
 
-      if($id_class == 2){
+
+      if($id_class == 2 && $id_level == 1){
         $vida = 80;
+
+        $sql_update_vida_total = "UPDATE players set hp_total = $vida where id = $id_player;";
+        $query_update_total = $this->db->query($sql_update_vida_total);
 
         $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
         $query_update = $this->db->query($sql_update_vida);

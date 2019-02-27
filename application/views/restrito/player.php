@@ -17,7 +17,7 @@
       </div></hr><br>
           <ul class="list-group">
             <li class="list-group-item text-muted">Status</li>
-            <li class="list-group-item text-right"><span class="pull-left"><strong><i class="fas fa-heart"></i></strong></span><?php print_r($playerInfo['hp']); ?></li>
+            <li class="list-group-item text-right"><span class="pull-left"><strong><i class="fas fa-heart"></i></strong></span><?php print_r($playerInfo['hp']); ?>/<?php print_r($playerInfo['hp_total']); ?></li>
             <li class="list-group-item text-right"><span class="pull-left"><strong><i class="fas fa-skull-crossbones"></i></strong></span> <?php print_r($zumbis); ?></li>
             <li class="list-group-item text-right"><span class="pull-left"><strong><i class="fas fa-tasks"></i></strong></span> <?php print_r($missoes_concluidas); ?></li>
             <li class="list-group-item text-right" title="Tempo Médio de Missão"><span class="pull-left"><strong><i class="far fa-clock"></i></strong></span> <?php print_r($soma_sla); ?></li>

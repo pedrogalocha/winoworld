@@ -8,6 +8,7 @@ class player extends CI_Controller {
     $this->load->model('Login_Model','permissao');
     $this->load->model('Player_Model','playerInfo');
     $this->load->model('Player_Model','conquistas');
+    $this->load->model('Player_Model','mes_atual');
     $this->load->model('Player_Model','tarefas');
     $this->load->model('Player_Model','tasks');
     $this->load->model('Player_Model','xpTotal');
@@ -36,22 +37,23 @@ class player extends CI_Controller {
     $login = $this->session->userdata('nome');
     $dados['pemissao'] = $this->permissao->getPermissao($login);
     $dados['playerInfo'] = $this->playerInfo->listar_player($login);
-    $dados['sem_categoria'] = $this->sem_categoria->sem_categoria($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id']);
+    $dados['mes_atual'] = $this->mes_atual->mes_atual();
+    $dados['sem_categoria'] = $this->sem_categoria->sem_categoria($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['coleta_hp'] = $this->coleta_hp->verificar_vida($dados['playerInfo']['id']);
     $dados['verificar_chance'] = $this->verificar_chance->verificar_chance($dados['playerInfo']['id']);
     $dados['atualiza_chance'] = $this->atualiza_chance->atualiza_chance($dados['playerInfo']['id'], $dados['coleta_hp'],$dados['verificar_chance']);
     $dados['playerHistorico'] = $this->playerInfo->listar_historico($dados['playerInfo']['name'], $dados['verificar_chance']);
     $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
-    $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id']);
+    $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id'],$dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['tasks'] = $this->tasks->listar_tarefas();
-    $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['verificar_chance'], $dados['playerHistorico']['zumbis_mortos']);
+    $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['verificar_chance'], $dados['playerHistorico']['zumbis_mortos'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
-    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis']);
+    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['playerInfo']['id'],$dados['zumbis']);
-    $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp']);
+    $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
     $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['atualiza_chance']) ;
-    $dados['verificar_level'] = $this->verificar_level->verificar_level($dados['playerInfo']['id'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'] );
+    $dados['verificar_level'] = $this->verificar_level->verificar_level($dados['playerInfo']['id'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'], $dados['playerInfo']['class_name'], $dados['playerInfo']['hp_total'], $dados['playerInfo']['hp'] );
     
     //Validar sessão de administrador
     if($dados['pemissao'] != "Jogador"){
@@ -134,7 +136,11 @@ class player extends CI_Controller {
 
     $this->load->model('Classes_Model','atualizar_classe');
     $dados['atualizar_classe'] = $this->atualizar_classe->atualizar_classe($id_player, $id_class, $id_level, $liberado);
-    redirect(base_url('Jogador'));
+
+    $this->load->model('Classes_Model','atualizar_classe');
+    $dados['atualizar_classe'] = $this->atualizar_classe->atualizar_classe($id_player, $id_class, $id_level, $liberado);
+
+    //redirect(base_url('Jogador'));
   }
 
 }

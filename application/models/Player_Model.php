@@ -9,7 +9,7 @@ class Player_Model extends CI_Model
     }
 
     public function listar_player($login){
-      $sql = "Select p.id, p.glpi_id ,p.chance, p.name,p.hp,l.level,c.class_name,u.username,p.avatar,p.xp,p.patent, p.liberado From players p 
+      $sql = "Select p.id, p.glpi_id ,p.chance, p.name,p.hp, p.hp_total,l.level,c.class_name,u.username,p.avatar,p.xp,p.patent, p.liberado From players p 
       Inner Join users u on p.users_id = u.id
       Inner Join level l on p.level_id = l.id 
         Inner Join class c on p.class_id = c.id
@@ -18,6 +18,18 @@ class Player_Model extends CI_Model
       $resultado = $heroe->row_array();
       if($resultado!=null){
         return $resultado;
+      } else {
+        return null;
+      }
+    }
+
+    public function mes_atual(){
+      $sql_mes = "SELECT inicio_mes, fim_mes FROM winoworld.mes_atual;";
+      $query_mes = $this->db->query($sql_mes);
+      $mes_atual = $query_mes->row_array();
+
+      if($mes_atual!=null){
+        return $mes_atual;
       } else {
         return null;
       }
@@ -52,12 +64,12 @@ class Player_Model extends CI_Model
       }
     }
 
-    public function listar_tarefas_feitas($id_player){
+    public function listar_tarefas_feitas($id_player, $inicio_mes, $fim_mes){
       $sql = "Select t.name_task, tf.data_conclusao, tf.quantidade, tf.n_chamado From task_feita tf
       Inner Join players p on tf.player_id = p.id
         Inner Join task t on tf.task_id = t.id
         where p.id = $id_player
-        and data_conclusao between '2019-02-01 00:00:00' and '2019-02-28 23:59:00'";
+        and data_conclusao between '$inicio_mes' and '$fim_mes'";
       $heroe = $this->db->query($sql);
       if($heroe!=null){
         return $heroe->result();
@@ -104,12 +116,12 @@ class Player_Model extends CI_Model
       return $xptask;
     }
 
-    public function somar_xp($id_player, $zumbis){
+    public function somar_xp($id_player, $zumbis, $inicio_mes, $fim_mes){
       //Pegar XP das Tarefas
       $xpSoma = "SELECT SUM(xp_total) FROM winoworld.task_feita tf
       Inner Join players p on tf.player_id = p.id
       where p.id = $id_player
-      and tf.data_conclusao between '2019-02-01 00:00:00' and '2019-02-28 23:59:00';";
+      and tf.data_conclusao between '$inicio_mes' and '$fim_mes';";
       $xpConvert = $this->db->query($xpSoma);
       $xp = $xpConvert->row_array();
       $xpTotal = implode(",", $xp);
@@ -123,12 +135,12 @@ class Player_Model extends CI_Model
       }
     }
 
-    public function quantidade_chamado($id_glpi,$id_player,$vida,$zumbis_historico){
+    public function quantidade_chamado($id_glpi,$id_player,$vida,$zumbis_historico, $inicio_mes, $fim_mes){
       $glpi = $this->load->database('glpi', TRUE);
       $sql = "SELECT count(*) FROM winover_chamados.glpi_tickets t
       Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
       Inner Join winover_chamados.glpi_itilcategories i on t.itilcategories_id = i.id 
-      where date between '2019-02-01 00:00:00' and '2019-02-28 23:00:00' AND u.id = $id_glpi;";
+      where date between '$inicio_mes' and '$fim_mes' AND u.id = $id_glpi;";
       $zombies = $glpi->query($sql);
       $zv = $zombies->row_array();
       $zombies_total = implode(",", $zv);
@@ -168,12 +180,12 @@ class Player_Model extends CI_Model
       }  
     }
 
-    public function somar_sla($id_glpi, $id_player, $hp){
+    public function somar_sla($id_glpi, $id_player, $hp, $inicio_mes, $fim_mes){
       $glpi = $this->load->database('glpi', TRUE);
       $sql = "SELECT SEC_TO_TIME(AVG(t.solve_delay_stat)) FROM winover_chamados.glpi_tickets t
       Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
       Inner Join winover_chamados.glpi_itilcategories i on t.itilcategories_id = i.id 
-      where date between '2019-02-01 00:00:00' and '2019-02-28 23:00:00' AND u.id = $id_glpi;";
+      where date between '$inicio_mes' and '$fim_mes' AND u.id = $id_glpi;";
       $sla_total_segundos = $glpi->query($sql);
       $sla_total = $sla_total_segundos->row_array();
       $sla_segregado = implode(",", $sla_total);
@@ -187,10 +199,10 @@ class Player_Model extends CI_Model
       }  
     }
 
-    public function sem_categoria($id_glpi){
+    public function sem_categoria($id_glpi, $inicio_mes, $fim_mes){
       $glpi = $this->load->database('glpi', TRUE);
       $sql = "SELECT COUNT(*) FROM winover_chamados.glpi_tickets 
-      where date between '2019-02-01 00:00:00' and '2019-02-28 23:00:00' 
+      where date between '$inicio_mes' and '$fim_mes' 
       and users_id_lastupdater = $id_glpi
       and itilcategories_id = 0;";
       $total_query = $glpi->query($sql);
@@ -235,12 +247,15 @@ class Player_Model extends CI_Model
 
     }
 
-    public function verificar_level($id_player,$level_id,$total_xp){
+    public function verificar_level($id_player,$level_id,$total_xp,$class, $hp_total, $hp){
       if($level_id == 0 && $total_xp>=3000){
-        $vida = 60;
+        $vida = $hp_total + 10;
 
         $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
         $query_update = $this->db->query($sql_update_vida);
+
+        $sql_update_vida_total = "UPDATE players set hp_total = $vida where id = $id_player";
+        $query_update_vida = $this->db->query($sql_update_vida_total);
 
         $sql_update_level = "UPDATE players set level_id = 2 where id = $id_player";
         $query_update = $this->db->query($sql_update_level);
@@ -252,7 +267,7 @@ class Player_Model extends CI_Model
         return $msg;
       }
       if($level_id == 1 && $total_xp>=8000){
-        $vida = 70;
+        $vida = $hp_total + 10;
 
         $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
         $query_update = $this->db->query($sql_update_vida);
@@ -264,7 +279,7 @@ class Player_Model extends CI_Model
         return $msg;
       }
       if($level_id == 2 && $total_xp>=13000){
-        $vida = 80;
+        $vida = $hp_total + 10;
 
         $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
         $query_update = $this->db->query($sql_update_vida);
