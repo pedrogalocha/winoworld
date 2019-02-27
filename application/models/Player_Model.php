@@ -56,7 +56,8 @@ class Player_Model extends CI_Model
       $sql = "Select t.name_task, tf.data_conclusao, tf.quantidade, tf.n_chamado From task_feita tf
       Inner Join players p on tf.player_id = p.id
         Inner Join task t on tf.task_id = t.id
-        where p.id = $id_player;";
+        where p.id = $id_player
+        and data_conclusao between '2019-02-01 00:00:00' and '2019-02-28 23:59:00'";
       $heroe = $this->db->query($sql);
       if($heroe!=null){
         return $heroe->result();
@@ -85,7 +86,7 @@ class Player_Model extends CI_Model
       $nchamado = $dados['nchamado'];
       $data = (string)$dados['data'];
 
-      $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp, $quantidade, $nchamado);";
+      $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp, $quantidade, $nchamado, null);";
 
       $this->db->query($sql);
       $msg = 'Cadastrado';
@@ -107,7 +108,8 @@ class Player_Model extends CI_Model
       //Pegar XP das Tarefas
       $xpSoma = "SELECT SUM(xp_total) FROM winoworld.task_feita tf
       Inner Join players p on tf.player_id = p.id
-      where p.id = $id_player;";
+      where p.id = $id_player
+      and tf.data_conclusao between '2019-02-01 00:00:00' and '2019-02-28 23:59:00';";
       $xpConvert = $this->db->query($xpSoma);
       $xp = $xpConvert->row_array();
       $xpTotal = implode(",", $xp);
@@ -233,8 +235,46 @@ class Player_Model extends CI_Model
 
     }
 
-    public function verificar_level($id_player,$level_id){
+    public function verificar_level($id_player,$level_id,$total_xp){
+      if($level_id == 0 && $total_xp>=3000){
+        $vida = 60;
 
+        $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
+        $query_update = $this->db->query($sql_update_vida);
+
+        $sql_update_level = "UPDATE players set level_id = 2 where id = $id_player";
+        $query_update = $this->db->query($sql_update_level);
+
+        $sql_update_liberado = "UPDATE players set liberado = 1 where id = $id_player";
+        $query_update = $this->db->query($sql_update_liberado);
+
+        $msg = "<script>alert('Você subiu para o nivel 1, escolha sua classe.')</script>";
+        return $msg;
+      }
+      if($level_id == 1 && $total_xp>=8000){
+        $vida = 70;
+
+        $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
+        $query_update = $this->db->query($sql_update_vida);
+
+        $sql_update_level = "UPDATE players set level_id = 3 where id = $id_player";
+        $query_update = $this->db->query($sql_update_level);
+
+        $msg = "<script>alert('Você subiu para o nivel 2')</script>";
+        return $msg;
+      }
+      if($level_id == 2 && $total_xp>=13000){
+        $vida = 80;
+
+        $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
+        $query_update = $this->db->query($sql_update_vida);
+
+        $sql_update_level = "UPDATE players set level_id = 4 where id = $id_player";
+        $query_update = $this->db->query($sql_update_level);
+
+        $msg = "<script>alert('Você subiu para o nivel 3')</script>";
+        return $msg;
+      }
     }
 
     public function verificar_vida($id_player){
@@ -297,12 +337,14 @@ class Player_Model extends CI_Model
       $sql_matando2 = "Update players set patent = null where id = $id_player;";
       $sql_matando3 = "Update players set xp = 0 where id = $id_player;";
       $sql_matando4 = "Update players set liberado = 0 where id = $id_player;";
+      $sql_matando5 ="Update task_feita set id_player_log = $id_player, player_id = 0 Where player_id = $id_player";
 
       $this->db->query($sql_matando);
       $this->db->query($sql_matando1);
       $this->db->query($sql_matando2);
       $this->db->query($sql_matando3);
       $this->db->query($sql_matando4);
+      $this->db->query($sql_matando5);
 
     }
    

@@ -28,6 +28,7 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','nova_vida');
     $this->load->model('Player_Model','matar_personagem');
     $this->load->model('Player_Model','listar_historico');
+    $this->load->model('Player_Model','verificar_level');
   }
 
   public function index()
@@ -44,12 +45,13 @@ class player extends CI_Controller {
     $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id']);
     $dados['tasks'] = $this->tasks->listar_tarefas();
     $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['verificar_chance'], $dados['playerHistorico']['zumbis_mortos']);
-    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis']);
     $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
+    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis']);
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['playerInfo']['id'],$dados['zumbis']);
     $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp']);
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
     $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['atualiza_chance']) ;
+    $dados['verificar_level'] = $this->verificar_level->verificar_level($dados['playerInfo']['id'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'] );
     
     //Validar sessão de administrador
     if($dados['pemissao'] != "Jogador"){
@@ -107,9 +109,8 @@ class player extends CI_Controller {
     
     if($prints == "Cadastrado"){
       echo "<script> 
-      alert('Cadastro efetuado com sucesso.');
+      alert('Cadastro Efetuado com sucesso'); window.location.href = 'Jogador';
     </script>";
-    redirect(base_url('Jogador'));
     }else{
       echo "<script> 
       alert('Houve um erro ao tentar cadastar.'); window.location.href = 'Jogador';
@@ -123,16 +124,17 @@ class player extends CI_Controller {
 
     $dados['pegar_habilidades'] = $this->pegar_habilidade->pegar_habilidades($id_class);
 
-    
-
   }
 
-  public function atualizar_level($id_player,$xp_total, $liberado, $level_id){
-      $dados['classes'] = $this->validar_xp->verificar_level($id_player,$level_up);
+  public function atualizar_classe(){
+    $id_class = $this->input->post('name_hab');
+    $id_player = $this->input->post('playerid');
+    $id_level = $this->input->post('player_level');
+    $liberado = $this->input->post('player_liberado');
 
-      if($xp_total>=1000 && $level=0 && $liberado=1){
-        $level_id = 2;
-        $dados['subir_level'] = $this->validar_xp->verificar_level($id_player,$level_up);
-      }
+    $this->load->model('Classes_Model','atualizar_classe');
+    $dados['atualizar_classe'] = $this->atualizar_classe->atualizar_classe($id_player, $id_class, $id_level, $liberado);
+    redirect(base_url('Jogador'));
   }
+
 }

@@ -18,15 +18,37 @@ class Classes_Model extends CI_Model
 
     public function pegar_habilidades($class_id){
 
-      $sql = "SELECT c.id, c.class_name,h.nome, h.desc, h.efeito FROM class c
+      $sql = "SELECT h.id,c.id, c.class_name,h.nome, h.desc, h.efeito FROM class c
       Inner Join habilidades_kit hk on c.id_habilidade = hk.id
       Inner Join habilidades h on hk.hab1 = h.id 
       or hk.hab2 = h.id 
       or hk.hab3 = h.id
+      or hk.hab4 = h.id 
+      or hk.hab5 = h.id
       where c.id = $class_id;";
       $heroe = $this->db->query($sql);
-      
-      echo json_encode($heroe->result());
+      $class = $heroe->result();
+      echo json_encode($class, JSON_UNESCAPED_UNICODE);
 
+    }
+
+    public function atualizar_classe($id_player, $id_class, $id_level, $liberado){
+
+      $sql_update_classe = "UPDATE players set class_id = $id_class where id = $id_player;";
+      $query_update = $this->db->query($sql_update_classe);
+
+      $sql_update_liberado = "UPDATE players set liberado = 0 where id = $id_player;";
+      $query_update = $this->db->query($sql_update_liberado);
+
+      if($id_class == 2){
+        $vida = 80;
+
+        $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
+        $query_update = $this->db->query($sql_update_vida);
+      }
+
+      $msg = "<script>alert('Classe escolhida com sucesso!')<script>";
+
+      return $query_update;
     }
 }

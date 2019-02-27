@@ -62,4 +62,5 @@ $route['Administrativo'] = 'adm';
 $route['Jogador'] = 'player';
 $route['AddTask'] = 'player/cadastrar_acionamento';
 $route['Habilidades'] = 'player/carregar_habilidades';
+$route['upLevel'] = 'player/atualizar_classe';
 
