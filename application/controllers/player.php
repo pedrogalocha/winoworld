@@ -38,7 +38,7 @@ class player extends CI_Controller {
     $dados['pemissao'] = $this->permissao->getPermissao($login);
     $dados['playerInfo'] = $this->playerInfo->listar_player($login);
     $dados['mes_atual'] = $this->mes_atual->mes_atual();
-    $dados['sem_categoria'] = $this->sem_categoria->sem_categoria($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
+    $dados['sem_categoria'] = $this->sem_categoria->sem_categoria($dados['playerInfo']['glpi_id'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['coleta_hp'] = $this->coleta_hp->verificar_vida($dados['playerInfo']['id']);
     $dados['verificar_chance'] = $this->verificar_chance->verificar_chance($dados['playerInfo']['id']);
     $dados['atualiza_chance'] = $this->atualiza_chance->atualiza_chance($dados['playerInfo']['id'], $dados['coleta_hp'],$dados['verificar_chance']);

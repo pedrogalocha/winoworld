@@ -9,7 +9,7 @@ class Player_Model extends CI_Model
     }
 
     public function listar_player($login){
-      $sql = "Select p.id, p.glpi_id ,p.chance, p.name,p.hp, p.hp_total,l.level,c.class_name,u.username,p.avatar,p.xp,p.patent, p.liberado From players p 
+      $sql = "Select p.id, p.glpi_id ,p.chance, p.name,p.hp, p.hp_total,l.level,c.class_name,u.username,p.avatar,p.xp, p.liberado From players p 
       Inner Join users u on p.users_id = u.id
       Inner Join level l on p.level_id = l.id 
         Inner Join class c on p.class_id = c.id
@@ -118,7 +118,7 @@ class Player_Model extends CI_Model
 
     public function somar_xp($id_player, $zumbis, $inicio_mes, $fim_mes){
       //Pegar XP das Tarefas
-      $xpSoma = "SELECT SUM(xp_total) FROM winoworld.task_feita tf
+      $xpSoma = "SELECT if(isnull(SUM(xp_total)),0,SUM(xp_total)) FROM winoworld.task_feita tf
       Inner Join players p on tf.player_id = p.id
       where p.id = $id_player
       and tf.data_conclusao between '$inicio_mes' and '$fim_mes';";
@@ -128,6 +128,8 @@ class Player_Model extends CI_Model
       $xp_final = $xpTotal + $zumbis;
       $sql = "Update players SET xp = $xp_final WHERE id= $id_player";
       $query_soma = $this->db->query($sql);
+      
+
       if($xpConvert!=null){
         return $xpConvert->result();
       } else {
@@ -217,7 +219,6 @@ class Player_Model extends CI_Model
       $query_select_aux = $this->db->query($sql_select_aux);
       $aux_log_zumbis = $query_select_aux->row_array();
       $log_zumbis = implode(",", $aux_log_zumbis);
-
 
       if($log_zumbis  != $total_sem_categoria){
 
@@ -349,14 +350,12 @@ class Player_Model extends CI_Model
     public function matar_personagem($id_player){
       $sql_matando =  "Update players set class_id = 1 where id = $id_player;"; 
       $sql_matando1 = "Update players set hp = 50 where id = $id_player; ";
-      $sql_matando2 = "Update players set patent = null where id = $id_player;";
       $sql_matando3 = "Update players set xp = 0 where id = $id_player;";
       $sql_matando4 = "Update players set liberado = 0 where id = $id_player;";
       $sql_matando5 ="Update task_feita set id_player_log = $id_player, player_id = 0 Where player_id = $id_player";
 
       $this->db->query($sql_matando);
       $this->db->query($sql_matando1);
-      $this->db->query($sql_matando2);
       $this->db->query($sql_matando3);
       $this->db->query($sql_matando4);
       $this->db->query($sql_matando5);
