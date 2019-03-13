@@ -89,7 +89,7 @@
                   </ul>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="contact.html">Heróis</a>
+                  <a class="nav-link" href="<?php echo base_url('ranking')?>">Ranking</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="contact.html">Conquistas</a>

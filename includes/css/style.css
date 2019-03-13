@@ -3888,4 +3888,13 @@ h6 {
   color: #3e3590;
 }
 
+/* Ranking CSS */
+.text-ranking {
+  text-align: center;
+  margin-top: 4%;
+}
+
+.hero-center{
+  text-align: center;
+}
 /*# sourceMappingURL=style.css.map */
