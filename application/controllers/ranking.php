@@ -11,6 +11,6 @@ class Ranking extends CI_Controller {
 	public function index()
 	{
 		$dados['ranking'] = $this->ranking->ranking_mes();
-		$this->load->view('ranking/ranking.php', $dados);
+		$this->load->view('telas/ranking.php', $dados);
 	}
 }
