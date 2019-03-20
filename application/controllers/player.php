@@ -96,6 +96,7 @@ class player extends CI_Controller {
     $dados_insert['task'] = $dados_form['name_task'];
     $dados_insert['playerid'] = $dados_form['playerid'];
     $dados_insert['quantidade'] = $dados_form['quantidade'];
+    $dados_insert['descricao'] = $dados_form['descricao'];
     if($dados_form['nchamado'] <=0){
      $dados_insert['nchamado'] = 0;
     }else{

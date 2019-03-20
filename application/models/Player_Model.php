@@ -65,11 +65,12 @@ class Player_Model extends CI_Model
     }
 
     public function listar_tarefas_feitas($id_player, $inicio_mes, $fim_mes){
-      $sql = "Select t.name_task, tf.data_conclusao, tf.quantidade, tf.n_chamado From task_feita tf
+      $sql = "Select t.name_task, tf.data_conclusao, tf.quantidade, tf.n_chamado, tf.descricao From task_feita tf
       Inner Join players p on tf.player_id = p.id
         Inner Join task t on tf.task_id = t.id
         where p.id = $id_player
-        and data_conclusao between '$inicio_mes' and '$fim_mes'";
+        and data_conclusao between '$inicio_mes' and '$fim_mes'
+        ORDER BY tf.data_conclusao desc;";
       $heroe = $this->db->query($sql);
       if($heroe!=null){
         return $heroe->result();
@@ -96,9 +97,10 @@ class Player_Model extends CI_Model
       $xp = $dados['xp'];
       $quantidade = $dados['quantidade'];
       $nchamado = $dados['nchamado'];
+      $descricao = $dados['descricao'];
       $data = (string)$dados['data'];
 
-      $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp, $quantidade, $nchamado, null);";
+      $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp, $quantidade, $nchamado, null, '$descricao');";
 
       $this->db->query($sql);
       $msg = 'Cadastrado';

@@ -6,7 +6,8 @@
         <tr>
           <th scope="col">Nome da Missão</th>
           <th scope="col">Data Conclusão</th>
-          <th scope="col">Quantidade/Vezes Efetuada</th>
+          <th scope="col">Quantidade</th>
+          <th scope="col">Descrição</th>
           <th scope="col">N° Chamado</th>
         </tr>
       </thead>
@@ -17,6 +18,7 @@
             <td><?= $tar->name_task; ?></td>
             <td><?= $tar->data_conclusao; ?></td>
             <td><?= $tar->quantidade; ?></td>
+            <td><?= $tar->descricao; ?></td>
             <td><?= $tar->n_chamado; ?></td>
           </td>
           </tr>

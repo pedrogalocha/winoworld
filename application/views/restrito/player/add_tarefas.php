@@ -63,6 +63,10 @@
           <label for="quantidade">N° Chamado</label>
             <input type="text" name="nchamado" class="form-control bfh-number col-sm-3">
         </div>
+        <div class="form-group">
+          <label for="quantidade">Descrição</label>
+            <input type="text" name="descricao" class="form-control" required>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
