@@ -12,7 +12,8 @@
           <th scope="col">HP</th>
           <th scope="col">Level</th>
           <th scope="col">Classe</th>
-          <th scope="col">XP</th>
+          <th scope="col">XP Atual</th>
+          <th scope="col">XP Total</th>
           <th scope="col">TMA</th>
           <th scope="col">Zumbis Mortos</th>
           <th scope="col">Mortes</th>
@@ -26,6 +27,7 @@
             <td><?= $ran->hp; ?></td>
             <td><?= $ran->level; ?></td>
             <td><?= $ran->class_name; ?></td>
+            <td><?= $ran->xp_atual; ?></td>
             <td><?= $ran->xp; ?></td>
             <td><?= $ran->tma; ?></td>
             <td><?= $ran->zumbis_mortos; ?></td>

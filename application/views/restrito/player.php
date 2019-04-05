@@ -8,7 +8,8 @@
         echo '<button class="botao-invisivel" type="button" data-toggle="modal" data-target="#upLevel"><i class="far fa-plus-square"></i></button>';
       }
       ?></div>
-      <div class="col-sm-3"><h1>XP Atual: <?php print_r($playerInfo['xp']); ?></div>
+      <div class="col-sm-3"><h1>XP Atual: <?php print_r($playerInfo['xp_atual']); ?></div>
+      <div class="col-sm-3"><h1>XP Total: <?php print_r($playerInfo['xp']); ?></div>
     </div>
     <div class="row">
   		<div class="col-sm-3"><!--left col-->

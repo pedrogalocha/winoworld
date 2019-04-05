@@ -9,7 +9,7 @@ class Player_Model extends CI_Model
     }
 
     public function listar_player($login){
-      $sql = "Select p.id, p.glpi_id ,p.chance, p.name,p.hp, p.hp_total,l.level,c.class_name,u.username,p.avatar,p.xp, p.liberado From players p 
+      $sql = "Select p.id, p.glpi_id ,p.chance, p.name,p.hp, p.hp_total,l.level,c.class_name,u.username,p.avatar,p.xp, p.xp_atual, p.liberado From players p 
       Inner Join users u on p.users_id = u.id
       Inner Join level l on p.level_id = l.id 
         Inner Join class c on p.class_id = c.id
@@ -100,7 +100,7 @@ class Player_Model extends CI_Model
       $descricao = $dados['descricao'];
       $data = (string)$dados['data'];
 
-      $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp, $quantidade, $nchamado, null, '$descricao');";
+      $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_atual, $quantidade, $nchamado, null, '$descricao');";
 
       $this->db->query($sql);
       $msg = 'Cadastrado';
@@ -128,7 +128,7 @@ class Player_Model extends CI_Model
       $xp = $xpConvert->row_array();
       $xpTotal = implode(",", $xp);
       $xp_final = $xpTotal + $zumbis;
-      $sql = "Update players SET xp = $xp_final WHERE id= $id_player";
+      $sql = "Update players SET xp_atual = $xp_final WHERE id= $id_player";
       $query_soma = $this->db->query($sql);
       
 
@@ -344,26 +344,52 @@ class Player_Model extends CI_Model
       } 
       }
 
-    public function registro_vida($id, $class_id, $name, $level_id, $xp, $zumbis_mortos, $tma, $sem_categoria){
-      $sql_log_vida = "INSERT INTO log_jogadores VALUES (null,'$name', $xp, $level_id, '$class_id', NOW(), '$tma', $zumbis_mortos, $sem_categoria);";
+    public function registro_vida($id, $class_id, $name, $level_id, $xp_atual, $zumbis_mortos, $tma, $sem_categoria){
+      $sql_log_vida = "INSERT INTO log_jogadores VALUES (null,'$name', $xp_atual, $level_id, '$class_id', NOW(), '$tma', $zumbis_mortos, $sem_categoria);";
       $registrando_morte = $this->db->query($sql_log_vida);
     }
 
     public function matar_personagem($id_player){
       $sql_matando =  "Update players set class_id = 1 where id = $id_player;"; 
       $sql_matando1 = "Update players set hp = 50 where id = $id_player; ";
-      $sql_matando3 = "Update players set xp = 0 where id = $id_player;";
+      $sql_matando3 = "Update players set xp_atual = 0 where id = $id_player;";
       $sql_matando4 = "Update players set liberado = 0 where id = $id_player;";
       $sql_matando5 ="Update task_feita set id_player_log = $id_player, player_id = 0 Where player_id = $id_player";
+      $sql_matando6 = "Update players set xp = 0 where id = $id_player;";
 
       $this->db->query($sql_matando);
       $this->db->query($sql_matando1);
       $this->db->query($sql_matando3);
       $this->db->query($sql_matando4);
       $this->db->query($sql_matando5);
+      $this->db->query($sql_matando6);
 
     }
    
+    public function somar_xp_geral($id_player, $id_glpi){
+      $sql_listar_interno = "SELECT if(isnull(SUM(xp_total)),0,SUM(xp_total)) FROM winoworld.task_feita tf
+      Inner Join players p on tf.player_id = p.id
+      where p.id = $id_player
+      and tf.data_conclusao between '2019-03-01 00:00:00' and '2019-12-31 23:59:59';";
+      $interno_query = $this->db->query($sql_listar_interno);
+      $interno_array = $interno_query->row_array();
+      $interno_total = implode(",", $interno_array);
+
+      $glpi = $this->load->database('glpi', TRUE);
+      $sql_listar_chamados = "SELECT count(*) FROM winover_chamados.glpi_tickets t
+      Inner Join winover_chamados.glpi_users u on t.users_id_lastupdater = u.id
+      Inner Join winover_chamados.glpi_itilcategories i on t.itilcategories_id = i.id 
+      where date between '2019-03-01 00:00:00' and '2019-12-31 23:59:59' AND u.id = $id_glpi;";
+      $chamados_query = $glpi->query($sql_listar_chamados);
+      $chamados_array = $chamados_query->row_array();
+      $chamados_total = implode(",", $chamados_array);
+
+      $total_xp = $interno_total + $chamados_total;
+
+      $sql_insert = "Update players set xp = $total_xp where id = $id_player";
+      $interno_query = $this->db->query($sql_insert);
+
+    }
 
     
 }

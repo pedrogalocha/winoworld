@@ -30,6 +30,7 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','matar_personagem');
     $this->load->model('Player_Model','listar_historico');
     $this->load->model('Player_Model','verificar_level');
+    $this->load->model('Player_Model','xpGeral');
   }
 
   public function index()
@@ -54,6 +55,7 @@ class player extends CI_Controller {
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
     $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['atualiza_chance']) ;
     $dados['verificar_level'] = $this->verificar_level->verificar_level($dados['playerInfo']['id'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'], $dados['playerInfo']['class_name'], $dados['playerInfo']['hp_total'], $dados['playerInfo']['hp'] );
+    $dados['xpGeral'] = $this->xpGeral->somar_xp_geral($dados['playerInfo']['id'], $dados['playerInfo']['glpi_id']);
     
     //Validar sessão de administrador
     if($dados['pemissao'] != "Jogador"){
