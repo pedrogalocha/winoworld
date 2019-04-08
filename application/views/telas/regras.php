@@ -7,7 +7,7 @@
   que poderiam ser preenchidas para melhorar ainda mais a interação da equipe com o campeonato.
   Por este ponto, foi desenvolvido um sistema e foi aprimorado mêcanicas neste novo jogo.</p>
 </div>
-  <div class="col-sm-12">
+  <div class="col-sm-12 ">
   <h1 class="text-ranking">Como ganhar Xp?</h1>
   <p>Uma das formas mais eficazes de ganhar XP é efetuando tarefas.</p>
     <table class="table table-hover">
