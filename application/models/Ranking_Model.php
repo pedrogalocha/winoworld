@@ -8,6 +8,7 @@ class Ranking_Model extends CI_Model
         $sql_ranking = "SELECT p.name, p.hp, l.level, c.class_name, p.xp,p.xp_atual, p.tma, p.zumbis_mortos, p.chance FROM players p
                         INNER JOIN level l on p.level_id = l.id
                         INNER JOIN class c on p.class_id = c.id
+                        WHERE p.name != 'Teste User'
                         ORDER BY xp_atual desc;";
         $query_ranking = $this->db->query($sql_ranking);
         if($query_ranking!=null){

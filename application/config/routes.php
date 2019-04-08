@@ -67,3 +67,4 @@ $route['upLevel'] = 'player/atualizar_classe';
 
 //Ranking
 $route['ranking'] = 'ranking';
+$route['regras'] = 'regras';

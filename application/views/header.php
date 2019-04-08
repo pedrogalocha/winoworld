@@ -58,7 +58,7 @@
             >
               <ul class="nav navbar-nav menu_nav justify-content-center">
                 <li class="nav-item">
-                  <a class="nav-link" href="#rules">Regras</a>
+                  <a class="nav-link" href="<?php echo base_url('regras')?>">Regras</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="gallery.html">Monstros</a>
