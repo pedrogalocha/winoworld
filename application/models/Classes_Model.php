@@ -17,7 +17,6 @@ class Classes_Model extends CI_Model
     }
 
     public function pegar_habilidades($class_id){
-
       $sql = "SELECT h.id,c.id, c.class_name,h.nome, h.desc, h.efeito FROM class c
       Inner Join habilidades_kit hk on c.id_habilidade = hk.id
       Inner Join habilidades h on hk.hab1 = h.id 

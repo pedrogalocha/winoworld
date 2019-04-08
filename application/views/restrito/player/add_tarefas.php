@@ -56,6 +56,8 @@
         <br>
         <div class="form-group">
           <input type="hidden" name="playerid" value="<?php print_r($playerInfo['id']); ?>" class="form-control bfh-number col-sm-3">
+          <input type="hidden" name="level" value="<?php print_r($playerInfo['level']); ?>" class="form-control bfh-number col-sm-3">
+          <input type="hidden" name="class_name" value="<?php print_r($playerInfo['class_name']); ?>" class="form-control bfh-number col-sm-3">
           <label for="quantidade">Quantidade</label>
             <input type="text" name="quantidade" class="form-control bfh-number col-sm-3" required>
         </div>

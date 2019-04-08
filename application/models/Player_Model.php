@@ -91,7 +91,7 @@ class Player_Model extends CI_Model
       }
     }
 
-    public function add_tarefas($dados){
+    public function add_tarefas($dados, $id_class, $level){
       $idtask = $dados['task'];
       $playerid = $dados['playerid'];
       $xp = $dados['xp'];
@@ -99,12 +99,21 @@ class Player_Model extends CI_Model
       $nchamado = $dados['nchamado'];
       $descricao = $dados['descricao'];
       $data = (string)$dados['data'];
+      if($id_class == 'Cientista' && $idtask == 9 && $level >= 1){
+        print_r('aqui');
+        $xp_classe = $xp+100;
+        $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
+        $this->db->query($sql);
+        $msg = 'Cadastrado';
+        return $msg;
+      } else {
+        $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp, $quantidade, $nchamado, null, '$descricao');";
+        $this->db->query($sql);
+        $msg = 'Cadastrado';
+        return $msg;
+      }
 
-      $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_atual, $quantidade, $nchamado, null, '$descricao');";
 
-      $this->db->query($sql);
-      $msg = 'Cadastrado';
-      return $msg;
     }
 
     public function pegar_xp($dados){

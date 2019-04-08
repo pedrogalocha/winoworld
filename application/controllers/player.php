@@ -99,6 +99,8 @@ class player extends CI_Controller {
     $dados_insert['playerid'] = $dados_form['playerid'];
     $dados_insert['quantidade'] = $dados_form['quantidade'];
     $dados_insert['descricao'] = $dados_form['descricao'];
+    $id_class = $dados_form['class_name'];
+    $level =  $dados_form['level'];
     if($dados_form['nchamado'] <=0){
      $dados_insert['nchamado'] = 0;
     }else{
@@ -110,7 +112,7 @@ class player extends CI_Controller {
 
     $dados_insert['xp'] = $xp_task*$dados_insert['quantidade'];
     
-    $prints = $this->tarefas->add_tarefas($dados_insert);
+    $prints = $this->tarefas->add_tarefas($dados_insert, $id_class,$level);
     
     if($prints == "Cadastrado"){
       echo "<script> 

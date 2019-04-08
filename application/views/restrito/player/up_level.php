@@ -43,7 +43,7 @@ function altera_habilidade( id_class )
                   $( "#hab" ).remove();
                   }
                   for(var dado in cachorro){
-                    $("#habilidades").append("<p id='hab'>" + cachorro[dado].nome + " : " + cachorro[dado].desc  +"</p>");
+                    $("#habilidades").append("<p id='hab'>" + cachorro[dado].nome + " : " + cachorro[dado].efeito  +"</p>");
                   }
                 }
                 }); 
