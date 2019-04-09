@@ -100,8 +100,19 @@ class Player_Model extends CI_Model
       $descricao = $dados['descricao'];
       $data = (string)$dados['data'];
       if($id_class == 'Cientista' && $idtask == 9 && $level >= 1){
-        print_r('aqui');
         $xp_classe = $xp+100;
+        $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
+        $this->db->query($sql);
+        $msg = 'Cadastrado';
+        return $msg;
+      } if ($id_class == 'Batedor' && $idtask == 14 && $level >=1) {
+        $xp_classe = $xp+50;
+        $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
+        $this->db->query($sql);
+        $msg = 'Cadastrado';
+        return $msg;
+      } if ($id_class == 'Engenheiro' && $idtask == 8 && $level >=1 ) {
+        $xp_classe = $xp+50;
         $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
         $this->db->query($sql);
         $msg = 'Cadastrado';
@@ -112,8 +123,6 @@ class Player_Model extends CI_Model
         $msg = 'Cadastrado';
         return $msg;
       }
-
-
     }
 
     public function pegar_xp($dados){
