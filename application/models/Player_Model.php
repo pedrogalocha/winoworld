@@ -24,7 +24,7 @@ class Player_Model extends CI_Model
     }
 
     public function mes_atual(){
-      $sql_mes = "SELECT inicio_mes, fim_mes FROM winoworld.mes_atual;";
+      $sql_mes = "SELECT inicio_mes, fim_mes FROM mes_atual;";
       $query_mes = $this->db->query($sql_mes);
       $mes_atual = $query_mes->row_array();
 
@@ -79,11 +79,19 @@ class Player_Model extends CI_Model
       }
     }
 
-    public function listar_tarefas(){
-      $sql = "SELECT id,name_task,xp FROM winoworld.task
-              where name_task != 'Eliminar Zumbi'
-              AND name_task != 'Tempo de missão diaria;'";
-      $heroe = $this->db->query($sql);
+    public function listar_tarefas($id_class, $level){
+      if($id_class == 'Cientista' && $level >=2){
+        $sql = "SELECT id,name_task,xp FROM winoworld_homolog.task
+        where name_task != 'Eliminar Zumbi'
+        AND name_task != 'Tempo de missão diaria;'";
+        $heroe = $this->db->query($sql);
+      } else {
+        $sql = "SELECT id,name_task,xp FROM winoworld_homolog.task
+        where name_task != 'Eliminar Zumbi'
+        AND name_task != 'Documentação de Soluções'
+        AND name_task != 'Tempo de missão diaria;'";
+        $heroe = $this->db->query($sql);
+      }
       if($heroe!=null){
         return $heroe->result();
       } else {
@@ -105,8 +113,20 @@ class Player_Model extends CI_Model
         $this->db->query($sql);
         $msg = 'Cadastrado';
         return $msg;
+      } if ($id_class == 'Cientista' && $idtask == 19 && $level >=2 ) {
+        $xp_classe = $xp+100;
+        $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
+        $this->db->query($sql);
+        $msg = 'Cadastrado';
+        return $msg;
       } if ($id_class == 'Batedor' && $idtask == 14 && $level >=1) {
         $xp_classe = $xp+50;
+        $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
+        $this->db->query($sql);
+        $msg = 'Cadastrado';
+        return $msg;
+      } if ($id_class == 'Batedor' && $idtask == 13 && $level >=2) {
+        $xp_classe = $xp+100;
         $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
         $this->db->query($sql);
         $msg = 'Cadastrado';
@@ -233,7 +253,7 @@ class Player_Model extends CI_Model
       return $total_sem_categoria;
     }
 
-    public function calcular_vida_semcat($id_player, $total_sem_categoria,$hp,$vida){ 
+    public function calcular_vida_semcat($id_player, $total_sem_categoria,$hp,$vida, $id_class, $level){ 
       //Pegando resultado da aux e aramazenando em variavel
       $sql_select_aux = "Select log_zumbis from zumbis_aux where id_player = $id_player;";
       $query_select_aux = $this->db->query($sql_select_aux);
@@ -252,10 +272,21 @@ class Player_Model extends CI_Model
 
 
         //Calculo perda de vida
+        if($id_class == 3 && $level >= 2){
+          $dano_total = $total_atual * 3;
+          $vida_perdida = $hp - $dano_total;
+
+          if($vida_perdida < 0 ){
+            $vida_perdida = 0;
+            $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
+        } else {
+            $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
+            $query_vida = $this->db->query($sql_update_vida);
+         }
+        } else {
         $dano_total = $total_atual * 6;
         $vida_perdida = $hp - $dano_total;
-
-        if($vida_perdida < 0 ){
+        } if($vida_perdida < 0 ){
           $vida_perdida = 0;
           $sql_update_vida = "Update players SET hp = '$vida_perdida' WHERE id= $id_player;";
           $query_vida = $this->db->query($sql_update_vida);
@@ -287,7 +318,7 @@ class Player_Model extends CI_Model
         $msg = "<script>alert('Você subiu para o nivel 1, escolha sua classe.')</script>";
         return $msg;
       }
-      if($level_id == 1 && $total_xp>=8000){
+      if($level_id == 1 && $total_xp>=7000){
         $vida = $hp_total + 10;
 
         $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";
@@ -299,7 +330,7 @@ class Player_Model extends CI_Model
         $msg = "<script>alert('Você subiu para o nivel 2')</script>";
         return $msg;
       }
-      if($level_id == 2 && $total_xp>=13000){
+      if($level_id == 2 && $total_xp>=15000){
         $vida = $hp_total + 10;
 
         $sql_update_vida = "UPDATE players set hp = $vida where id = $id_player";

@@ -46,14 +46,14 @@ class player extends CI_Controller {
     $dados['playerHistorico'] = $this->playerInfo->listar_historico($dados['playerInfo']['name'], $dados['verificar_chance']);
     $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
     $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id'],$dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
-    $dados['tasks'] = $this->tasks->listar_tarefas();
+    $dados['tasks'] = $this->tasks->listar_tarefas($dados['playerInfo']['class_name'], $dados['playerInfo']['level']);
     $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['verificar_chance'], $dados['playerHistorico']['zumbis_mortos'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
     $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['playerInfo']['id'],$dados['zumbis']);
     $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
-    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['atualiza_chance']) ;
+    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['atualiza_chance'],$dados['playerInfo']['class_name'], $dados['playerInfo']['level']) ;
     $dados['verificar_level'] = $this->verificar_level->verificar_level($dados['playerInfo']['id'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'], $dados['playerInfo']['class_name'], $dados['playerInfo']['hp_total'], $dados['playerInfo']['hp'] );
     $dados['xpGeral'] = $this->xpGeral->somar_xp_geral($dados['playerInfo']['id'], $dados['playerInfo']['glpi_id']);
     
