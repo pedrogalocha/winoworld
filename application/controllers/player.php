@@ -10,6 +10,8 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','conquistas');
     $this->load->model('Player_Model','mes_atual');
     $this->load->model('Player_Model','tarefas');
+    $this->load->model('Mercado_Model','itens');
+    $this->load->model('Mercado_Model','itens_comprados');
     $this->load->model('Player_Model','tasks');
     $this->load->model('Player_Model','xpTotal');
     $this->load->model('Player_Model','zumbis');
@@ -47,9 +49,11 @@ class player extends CI_Controller {
     $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
     $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id'],$dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['tasks'] = $this->tasks->listar_tarefas($dados['playerInfo']['class_name'], $dados['playerInfo']['level']);
+    $dados['itens'] = $this->itens->listar_itens();
+    $dados['itens_comprados'] = $this->itens_comprados->listar_itens_comprados($dados['playerInfo']['id'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['verificar_chance'], $dados['playerHistorico']['zumbis_mortos'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
-    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
+    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes'],$dados['itens_comprados']);
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['playerInfo']['id'],$dados['zumbis']);
     $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();

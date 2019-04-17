@@ -37,7 +37,7 @@ class Player_Model extends CI_Model
 
     public function listar_historico($player_name, $second){
       if($second == 1){
-      $sql = "SELECT l.nome_jogador, l.zumbis_mortos, l.sem_categoria FROM winoworld.log_jogadores l
+      $sql = "SELECT l.nome_jogador, l.zumbis_mortos, l.sem_categoria FROM log_jogadores l
       Inner Join players p on l.nome_jogador = p.name where l.nome_jogador = '$player_name';";
       $heroe = $this->db->query($sql);
       $resultado = $heroe->row_array();
@@ -81,15 +81,15 @@ class Player_Model extends CI_Model
 
     public function listar_tarefas($id_class, $level){
       if($id_class == 'Cientista' && $level >=2){
-        $sql = "SELECT id,name_task,xp FROM winoworld_homolog.task
+        $sql = "SELECT id,name_task,xp FROM task
         where name_task != 'Eliminar Zumbi'
         AND name_task != 'Tempo de missão diaria;'";
         $heroe = $this->db->query($sql);
       } else {
-        $sql = "SELECT id,name_task,xp FROM winoworld_homolog.task
+        $sql = "SELECT id,name_task,xp FROM task
         where name_task != 'Eliminar Zumbi'
         AND name_task != 'Documentação de Soluções'
-        AND name_task != 'Tempo de missão diaria;'";
+        AND name_task != 'SLA Semanal';";
         $heroe = $this->db->query($sql);
       }
       if($heroe!=null){
@@ -108,25 +108,25 @@ class Player_Model extends CI_Model
       $descricao = $dados['descricao'];
       $data = (string)$dados['data'];
       if($id_class == 'Cientista' && $idtask == 9 && $level >= 1){
-        $xp_classe = $xp+100;
+        $xp_classe = $xp+$xp;
         $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
         $this->db->query($sql);
         $msg = 'Cadastrado';
         return $msg;
       } if ($id_class == 'Cientista' && $idtask == 19 && $level >=2 ) {
-        $xp_classe = $xp+100;
+        $xp_classe = $xp+$xp;
         $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
         $this->db->query($sql);
         $msg = 'Cadastrado';
         return $msg;
       } if ($id_class == 'Batedor' && $idtask == 14 && $level >=1) {
-        $xp_classe = $xp+50;
+        $xp_classe = $xp+$xp;
         $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
         $this->db->query($sql);
         $msg = 'Cadastrado';
         return $msg;
       } if ($id_class == 'Batedor' && $idtask == 13 && $level >=2) {
-        $xp_classe = $xp+100;
+        $xp_classe = $xp+$xp;
         $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
         $this->db->query($sql);
         $msg = 'Cadastrado';
@@ -156,20 +156,25 @@ class Player_Model extends CI_Model
       return $xptask;
     }
 
-    public function somar_xp($id_player, $zumbis, $inicio_mes, $fim_mes){
+    public function somar_xp($id_player, $zumbis, $inicio_mes, $fim_mes, $itens_comprados){
       //Pegar XP das Tarefas
-      $xpSoma = "SELECT if(isnull(SUM(xp_total)),0,SUM(xp_total)) FROM winoworld.task_feita tf
+      $xpSoma = "SELECT if(isnull(SUM(xp_total)),0,SUM(xp_total)) FROM task_feita tf
       Inner Join players p on tf.player_id = p.id
       where p.id = $id_player
       and tf.data_conclusao between '$inicio_mes' and '$fim_mes';";
       $xpConvert = $this->db->query($xpSoma);
       $xp = $xpConvert->row_array();
       $xpTotal = implode(",", $xp);
-      $xp_final = $xpTotal + $zumbis;
+      $xp_tasks_zombies = $xpTotal + $zumbis;
+      if($itens_comprados == null){
+        $itens_comprados = 0;
+      } else {
+        $itens_comprados = $itens_comprados;
+      }
+      $xp_final = $xp_tasks_zombies + $itens_comprados;
       $sql = "Update players SET xp_atual = $xp_final WHERE id= $id_player";
       $query_soma = $this->db->query($sql);
       
-
       if($xpConvert!=null){
         return $xpConvert->result();
       } else {
@@ -203,7 +208,7 @@ class Player_Model extends CI_Model
     }
 
     public function atualizando_banco($id_player, $zombies_total){
-      $sql2 = "Update winoworld.players set zumbis_mortos = $zombies_total where id = $id_player;";
+      $sql2 = "Update players set zumbis_mortos = $zombies_total where id = $id_player;";
       $zombies_mortos = $this->db->query($sql2);
     }
 
@@ -416,7 +421,7 @@ class Player_Model extends CI_Model
     }
    
     public function somar_xp_geral($id_player, $id_glpi){
-      $sql_listar_interno = "SELECT if(isnull(SUM(xp_total)),0,SUM(xp_total)) FROM winoworld.task_feita tf
+      $sql_listar_interno = "SELECT if(isnull(SUM(xp_total)),0,SUM(xp_total)) FROM task_feita tf
       Inner Join players p on tf.player_id = p.id
       where p.id = $id_player
       and tf.data_conclusao between '2019-03-01 00:00:00' and '2019-12-31 23:59:59';";
