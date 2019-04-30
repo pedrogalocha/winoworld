@@ -113,7 +113,11 @@ class Player_Model extends CI_Model
         $this->db->query($sql);
         $msg = 'Cadastrado';
         return $msg;
+<<<<<<< HEAD
       } if ($id_class == 'Cientista' && $idtask == 21 && $level >=2 ) {
+=======
+      } if ($id_class == 'Cientista' && $idtask == 19 && $level >=2 ) {
+>>>>>>> master
         $xp_classe = $xp+$xp;
         $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
         $this->db->query($sql);
@@ -124,7 +128,10 @@ class Player_Model extends CI_Model
         $sql = "Insert into task_feita values (null,$idtask,'$data', $playerid, $xp_classe, $quantidade, $nchamado, null, '$descricao');";
         $this->db->query($sql);
         $msg = 'Cadastrado';
+<<<<<<< HEAD
         print_r($xp_classe);
+=======
+>>>>>>> master
         return $msg;
       } if ($id_class == 'Batedor' && $idtask == 13 && $level >=2) {
         $xp_classe = $xp+$xp;
@@ -174,6 +181,7 @@ class Player_Model extends CI_Model
       $xpConvert = $this->db->query($xpSoma);
       $xp = $xpConvert->row_array();
       $xpTotal = implode(",", $xp);
+<<<<<<< HEAD
 
       $xpConvertConquista = $this->db->query($xpConquista);
       $xpCon = $xpConvertConquista->row_array();
@@ -181,6 +189,9 @@ class Player_Model extends CI_Model
 
 
       $xp_tasks_zombies = $xpTotal + $zumbis + $xpConTotal;
+=======
+      $xp_tasks_zombies = $xpTotal + $zumbis;
+>>>>>>> master
       if($itens_comprados == null){
         $itens_comprados = 0;
       } else {
