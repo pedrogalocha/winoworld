@@ -10,6 +10,8 @@ class player extends CI_Controller {
     $this->load->model('Player_Model','conquistas');
     $this->load->model('Player_Model','mes_atual');
     $this->load->model('Player_Model','tarefas');
+    $this->load->model('Mercado_Model','itens');
+    $this->load->model('Mercado_Model','itens_comprados');
     $this->load->model('Player_Model','tasks');
     $this->load->model('Player_Model','xpTotal');
     $this->load->model('Player_Model','zumbis');
@@ -44,16 +46,18 @@ class player extends CI_Controller {
     $dados['verificar_chance'] = $this->verificar_chance->verificar_chance($dados['playerInfo']['id']);
     $dados['atualiza_chance'] = $this->atualiza_chance->atualiza_chance($dados['playerInfo']['id'], $dados['coleta_hp'],$dados['verificar_chance']);
     $dados['playerHistorico'] = $this->playerInfo->listar_historico($dados['playerInfo']['name'], $dados['verificar_chance']);
-    $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id']);
+    $dados['conquistas'] = $this->conquistas->listar_conquistas($dados['playerInfo']['id'],$dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['tarefas'] = $this->tarefas->listar_tarefas_feitas($dados['playerInfo']['id'],$dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
-    $dados['tasks'] = $this->tasks->listar_tarefas();
+    $dados['tasks'] = $this->tasks->listar_tarefas($dados['playerInfo']['class_name'], $dados['playerInfo']['level']);
+    $dados['itens'] = $this->itens->listar_itens();
+    $dados['itens_comprados'] = $this->itens_comprados->listar_itens_comprados($dados['playerInfo']['id'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['zumbis'] = $this->zumbis->quantidade_chamado($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['verificar_chance'], $dados['playerHistorico']['zumbis_mortos'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['missoes_concluidas'] = $this->missoes_concluidas->missoes_concluidas($dados['playerInfo']['id']);
-    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
+    $dados['xpTotal'] = $this->xpTotal->somar_xp($dados['playerInfo']['id'], $dados['zumbis'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes'],$dados['itens_comprados']);
     $dados['atualizando_zumbis_banco'] = $this->atualizando_zumbis_banco->atualizando_banco($dados['playerInfo']['id'],$dados['zumbis']);
     $dados['soma_sla'] = $this->soma_sla->somar_sla($dados['playerInfo']['glpi_id'],$dados['playerInfo']['id'], $dados['playerInfo']['hp'], $dados['mes_atual']['inicio_mes'],$dados['mes_atual']['fim_mes']);
     $dados['pegar_classes'] = $this->pegar_classes->pegar_classes();
-    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['atualiza_chance']) ;
+    $dados['perde_vida_sem_categoria'] = $this->perde_vida_sem_categoria->calcular_vida_semcat($dados['playerInfo']['id'],$dados['sem_categoria'], $dados['playerInfo']['hp'],$dados['atualiza_chance'],$dados['playerInfo']['class_name'], $dados['playerInfo']['level']) ;
     $dados['verificar_level'] = $this->verificar_level->verificar_level($dados['playerInfo']['id'],$dados['playerInfo']['level'], $dados['playerInfo']['xp'], $dados['playerInfo']['class_name'], $dados['playerInfo']['hp_total'], $dados['playerInfo']['hp'] );
     $dados['xpGeral'] = $this->xpGeral->somar_xp_geral($dados['playerInfo']['id'], $dados['playerInfo']['glpi_id']);
     

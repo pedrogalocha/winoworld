@@ -61,6 +61,7 @@ $route['login'] = 'Login';
 $route['Administrativo'] = 'adm';
 $route['Jogador'] = 'player';
 $route['AddTask'] = 'player/cadastrar_acionamento';
+$route['BuyItem'] = 'mercado/comprar_item';
 $route['Habilidades'] = 'player/carregar_habilidades';
 $route['upLevel'] = 'player/atualizar_classe';
 
@@ -68,3 +69,5 @@ $route['upLevel'] = 'player/atualizar_classe';
 //Ranking
 $route['ranking'] = 'ranking';
 $route['regras'] = 'regras';
+
+$route['saida'] = 'saida';

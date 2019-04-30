@@ -42,8 +42,10 @@
                 </div>
               </div>
             </div>
-          </div>
         <?php }?>
+        </div>
+        <div></div>
+        <div class="col-md-12"></div>
         <?php $this->load->view('restrito/player/listar_tarefas')?>
       </div>
       </div>
@@ -51,6 +53,7 @@
       </div><!--/card-avatar-->
 </div>
 <?php $this->load->view('restrito/player/add_tarefas')?>
+<?php $this->load->view('restrito/player/market')?>
 <?php $this->load->view('restrito/player/up_level')?>
 
 <?php $this->load->view('footer')?>

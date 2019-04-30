@@ -92,7 +92,7 @@
                   <a class="nav-link" href="<?php echo base_url('ranking')?>">Ranking</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="contact.html">Conquistas</a>
+                  <a class="nav-link" href="<?php echo base_url('saida')?>">Conquistas</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="contact.html">Missões Efetuadas</a>
